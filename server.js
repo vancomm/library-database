@@ -1,15 +1,25 @@
 import dotenv from 'dotenv';
 import express from 'express';
+import cors from 'cors';
+import connectToDb from './src/services/connect-to-db.js';
+import query from './src/services/query.js';
 
 dotenv.config();
-
 const port = process.env.PORT || 3000;
+
+const db = connectToDb();
 
 const app = express();
 
-app.get('/', (req, res) => {
+app.use(cors());
+
+app.get('/books', async (req, res) => {
+  const books = await query(db, 'SELECT * FROM book');
+  res.status(200).send(books);
+});
+
+app.get('*', (req, res) => {
   res.send({ text: 'Hello world!' });
 });
 
-console.log(`Server listening on port ${port}`);
-app.listen(port);
+app.listen(port, console.log(`Server listening on port http://localhost:${port}`));

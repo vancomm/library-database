@@ -5,7 +5,8 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
-    "start": "node ./server.js"
+    "start": "node ./server.js",
+    "create": "node ./bin/create-db.js"
   },
   "keywords": [],
   "author": "",
@@ -19,6 +20,7 @@
     "eslint-plugin-react-hooks": "^4.6.0"
   },
   "dependencies": {
+    "cors": "^2.8.5",
     "dotenv": "^16.0.1",
     "express": "^4.18.1",
     "sqlite3": "^5.0.8"
