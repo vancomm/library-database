@@ -1,26 +1,20 @@
-import { useEffect, useState } from "react";
+import { Routes, Route } from 'react-router-dom';
+import Home from './pages/Home.js';
+import First from './pages/First.js';
+import Second from './pages/Second.js';
+import Navigation from './components/Navigation.js';
+import Patrons from './pages/Patrons.js';
 
 function App() {
-  const [books, setBooks] = useState([]);
-
-  useEffect(() => {
-    async function fetchData() {
-      const res = await fetch('http://localhost:3001/books', { headers: { 'Content-Type': 'application/json' } });
-      if (!res.ok) return;
-      const data = await res.json();
-      setBooks(data);
-    }
-
-    fetchData();
-  }, []);
-
   return (
     <>
-      <h1>Hello world!</h1>
-
-      <ul>{
-        books.map((book, i) => <li key={i}>{book.title}</li>)}
-      </ul>
+      <Navigation />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/first" element={<First />} />
+        <Route path="/second" element={<Second />} />
+        <Route path="/patrons" element={<Patrons />} />
+      </Routes>
     </>
   );
 }
