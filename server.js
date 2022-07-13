@@ -1,6 +1,7 @@
 import dotenv from 'dotenv';
 import express from 'express';
 import cors from 'cors';
+import patronRouter from './src/routes/patrons.js';
 import connectToDb from './src/services/connect-to-db.js';
 import query from './src/services/query.js';
 
@@ -12,6 +13,9 @@ const db = connectToDb();
 const app = express();
 
 app.use(cors());
+app.use(express.json());
+
+app.use('/patrons', patronRouter);
 
 app.get('/books', async (req, res) => {
   const books = await query(db, 'SELECT * FROM book');

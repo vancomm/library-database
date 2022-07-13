@@ -7,121 +7,121 @@ export default function createDb() {
   const db = connectToDb();
 
   db.run(`CREATE TABLE patron(
-  patronid  INTEGER PRIMARY KEY AUTOINCREMENT,
-  firstname TEXT NOT NULL,
-  lastname  TEXT NOT NULL,
+  patronId  INTEGER PRIMARY KEY AUTOINCREMENT,
+  firstName TEXT NOT NULL,
+  lastName  TEXT NOT NULL,
   phone     TEXT,
   email     TEXT
 )`);
 
   db.run(`CREATE TABLE publisher(
-  publisherid       INTEGER PRIMARY KEY AUTOINCREMENT,
+  publisherId       INTEGER PRIMARY KEY AUTOINCREMENT,
   name              TEXT NOT NULL,
-  contactfirstname  TEXT,
-  contactlastname   TEXT,
-  contactphone      TEXT,
-  contactemail      TEXT
+  contactFirstName  TEXT,
+  contactLastName   TEXT,
+  contactPhone      TEXT,
+  contactEmail      TEXT
 )`);
 
   db.run(`CREATE TABLE book(
-  bookid        INTEGER PRIMARY KEY AUTOINCREMENT,
-  publisherid   INTEGER NOT NULL,
+  bookId        INTEGER PRIMARY KEY AUTOINCREMENT,
+  publisherId   INTEGER NOT NULL,
   title         TEXT,
-  publisheddate TEXT,
-  pagescount    INTEGER,
+  publishedDate TEXT,
+  pagesCount    INTEGER,
 
-  FOREIGN KEY(publisherid) REFERENCES publisher(publisherid)
+  FOREIGN KEY(publisherId) REFERENCES publisher(publisherId)
 )`);
 
   db.run(`CREATE TABLE copy(
-  copyid        INTEGER PRIMARY KEY AUTOINCREMENT,
-  bookid        INTEGER NOT NULL,
-  acquireddate  TEXT NOT NULL,
-  discardeddate TEXT,
+  copyId        INTEGER PRIMARY KEY AUTOINCREMENT,
+  bookId        INTEGER NOT NULL,
+  acquiredDate  TEXT NOT NULL,
+  discardedDate TEXT,
 
-  FOREIGN KEY(bookid) REFERENCES book(bookid)
+  FOREIGN KEY(bookId) REFERENCES book(bookId)
 )`);
 
   db.run(`CREATE TABLE borrow (
-  borrowid    INTEGER PRIMARY KEY AUTOINCREMENT,
-  patronid    INTEGER NOT NULL,
-  copyid      INTEGER NOT NULL,
-  borrowdate  TEXT NOT NULL,
-  duedate     TEXT NOT NULL,
-  returndate  TEXT,
+  borrowId    INTEGER PRIMARY KEY AUTOINCREMENT,
+  patronId    INTEGER NOT NULL,
+  copyId      INTEGER NOT NULL,
+  borrowDate  TEXT NOT NULL,
+  dueDate     TEXT NOT NULL,
+  returnDate  TEXT,
 
-  FOREIGN KEY(patronid) REFERENCES patron(patronid),
-  FOREIGN KEY(copyid) REFERENCES copy(copyid)
+  FOREIGN KEY(patronId) REFERENCES patron(patronId),
+  FOREIGN KEY(copyId) REFERENCES copy(copyId)
 )`);
 
   db.run(`CREATE TABLE hold(
-  holdid    INTEGER PRIMARY KEY AUTOINCREMENT,
-  patronid  INTEGER NOT NULL,
-  bookid    INTEGER NOT NULL,
-  startdate TEXT NOT NULL,
-  enddate   TEXT,
+  holdId    INTEGER PRIMARY KEY AUTOINCREMENT,
+  patronId  INTEGER NOT NULL,
+  bookId    INTEGER NOT NULL,
+  startDate TEXT NOT NULL,
+  endDate   TEXT,
 
-  FOREIGN KEY(patronid) REFERENCES patron(patronid),
-  FOREIGN KEY(bookid) REFERENCES book(bookid)
+  FOREIGN KEY(patronId) REFERENCES patron(patronId),
+  FOREIGN KEY(bookId) REFERENCES book(bookId)
 )`);
 
   db.run(`CREATE TABLE review(
-  patronid    INTEGER NOT NULL,
-  bookid      INTEGER NOT NULL,
-  reviewpts   INTEGER NOT NULL,
-  reviewtext  TEXT,
-  reviewdate  TEXT NOT NULL
+  patronId    INTEGER NOT NULL,
+  bookId      INTEGER NOT NULL,
+  reviewPts   INTEGER NOT NULL,
+  reviewText  TEXT,
+  reviewDate  TEXT NOT NULL
 )`);
 
   db.run(`CREATE TABLE author(
-  authorid  INTEGER PRIMARY KEY AUTOINCREMENT,
-  firstname TEXT NOT NULL,
-  lastname  TEXT NOT NULL,
+  authorId  INTEGER PRIMARY KEY AUTOINCREMENT,
+  firstName TEXT NOT NULL,
+  lastName  TEXT NOT NULL,
   phone     TEXT,
   email     TEXT
 )`);
 
   db.run(`CREATE TABLE book_author(
-  bookid    INTEGER NOT NULL,
-  authorid  INTEGER NOT NULL,
+  bookId    INTEGER NOT NULL,
+  authorId  INTEGER NOT NULL,
 
-  PRIMARY KEY(bookid, authorid),
+  PRIMARY KEY(bookId, authorId),
 
-  FOREIGN KEY(bookid) REFERENCES book(bookid),
-  FOREIGN KEY(authorid) REFERENCES author(authorid)
+  FOREIGN KEY(bookId) REFERENCES book(bookId),
+  FOREIGN KEY(authorId) REFERENCES author(authorId)
 )`);
 
   db.run(`CREATE TABLE tag(
-  tagid INTEGER PRIMARY KEY AUTOINCREMENT,
+  tagId INTEGER PRIMARY KEY AUTOINCREMENT,
   name  TEXT NOT NULL,
   value TEXT
 )`);
 
   db.run(`CREATE TABLE book_tag(
-  bookid INTEGER NOT NULL,
-  tagid  INTEGER NOT NULL,
+  bookId INTEGER NOT NULL,
+  tagId  INTEGER NOT NULL,
 
-  PRIMARY KEY(bookid, tagid),
+  PRIMARY KEY(bookId, tagId),
 
-  FOREIGN KEY(bookid) REFERENCES book(bookid),
-  FOREIGN KEY(tagid) REFERENCES tag(tagid)
+  FOREIGN KEY(bookId) REFERENCES book(bookId),
+  FOREIGN KEY(tagId) REFERENCES tag(tagId)
 )`);
 
   db.run(`CREATE TABLE category(
-  categoryid        INTEGER PRIMARY KEY AUTOINCREMENT,
+  categoryId        INTEGER PRIMARY KEY AUTOINCREMENT,
   name              TEXT NOT NULL,
-  parentcategoryid  INTEGER,
+  parentcategoryId  INTEGER,
 
-  FOREIGN KEY(parentcategoryid) REFERENCES category(categoryid)
+  FOREIGN KEY(parentcategoryId) REFERENCES category(categoryId)
 )`);
 
   db.run(`CREATE TABLE book_category(
-  bookid      INTEGER NOT NULL,
-  categoryid  INTEGER NOT NULL,
+  bookId      INTEGER NOT NULL,
+  categoryId  INTEGER NOT NULL,
 
-  PRIMARY KEY(bookid, categoryid),
+  PRIMARY KEY(bookId, categoryId),
 
-  FOREIGN KEY(bookid) REFERENCES book(bookid),
-  FOREIGN KEY(categoryid) REFERENCES category(categoryid)
+  FOREIGN KEY(bookId) REFERENCES book(bookId),
+  FOREIGN KEY(categoryId) REFERENCES category(categoryId)
 )`);
 }
