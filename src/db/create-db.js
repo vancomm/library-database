@@ -1,13 +1,13 @@
-import dropDatabase from './drop-db.js';
+import resetDb from './reset-db.js';
 import connectToDb from './connect-to-db.js';
 
-export default function createDb() {
-  dropDatabase();
+export default function createDb(dbPath) {
+  resetDb(dbPath);
 
-  const db = connectToDb();
+  const db = connectToDb(dbPath);
 
   db.run(`CREATE TABLE patron(
-  patronId  INTEGER PRIMARY KEY AUTOINCREMENT,
+  id  INTEGER PRIMARY KEY AUTOINCREMENT,
   firstName TEXT NOT NULL,
   lastName  TEXT NOT NULL,
   phone     TEXT,
@@ -50,7 +50,7 @@ export default function createDb() {
   dueDate     TEXT NOT NULL,
   returnDate  TEXT,
 
-  FOREIGN KEY(patronId) REFERENCES patron(patronId),
+  FOREIGN KEY(patronid) REFERENCES patron(id),
   FOREIGN KEY(copyId) REFERENCES copy(copyId)
 )`);
 
@@ -61,7 +61,7 @@ export default function createDb() {
   startDate TEXT NOT NULL,
   endDate   TEXT,
 
-  FOREIGN KEY(patronId) REFERENCES patron(patronId),
+  FOREIGN KEY(patronId) REFERENCES patron(id),
   FOREIGN KEY(bookId) REFERENCES book(bookId)
 )`);
 
@@ -70,7 +70,9 @@ export default function createDb() {
   bookId      INTEGER NOT NULL,
   reviewPts   INTEGER NOT NULL,
   reviewText  TEXT,
-  reviewDate  TEXT NOT NULL
+  reviewDate  TEXT NOT NULL,
+  
+  FOREIGN KEY (patronId) REFERENCES patron(id)
 )`);
 
   db.run(`CREATE TABLE author(

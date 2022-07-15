@@ -1,11 +1,8 @@
-import dotenv from 'dotenv';
 import sqlite from 'sqlite3';
 
-dotenv.config();
-
-export default function connectToDb() {
+export default function connectToDb(path) {
   const db = new sqlite.Database(
-    process.env.DATABASE_PATH,
+    path,
     sqlite.OPEN_READWRITE,
     (e) => {
       if (e) {

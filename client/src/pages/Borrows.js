@@ -1,9 +1,9 @@
 import Container from 'react-bootstrap/Container';
 
-export default function First() {
+export default function Borrows() {
   return (
     <Container>
-      <h1>First</h1>
+      <h1>Borrows</h1>
     </Container>
   );
 }

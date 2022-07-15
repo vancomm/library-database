@@ -1,6 +1,0 @@
-POST http://localhost:3001/patrons
-Content-Type: application/json
-
-{
-  "text": "Hello world"
-}

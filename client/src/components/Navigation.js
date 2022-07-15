@@ -1,7 +1,8 @@
 import { NavLink } from 'react-router-dom/';
-import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
+import Navbar from 'react-bootstrap/Navbar';
 import Container from 'react-bootstrap/Container';
+import NavDropdown from 'react-bootstrap/NavDropdown';
 import LinkContainer from 'react-router-bootstrap/LinkContainer';
 
 export default function Navigation() {
@@ -15,14 +16,32 @@ export default function Navigation() {
         <Navbar.Collapse>
           <Nav className="me-auto">
             <Nav.Item>
-              <NavLink className="nav-link" to="/first">First</NavLink>
+              <NavLink className="nav-link" to="/books">
+                Books
+              </NavLink>
             </Nav.Item>
             <Nav.Item>
-              <NavLink className="nav-link" to="/second">Second</NavLink>
+              <NavLink className="nav-link" to="/borrows">
+                Borrows
+              </NavLink>
             </Nav.Item>
             <Nav.Item>
-              <NavLink className="nav-link" to="/patrons">Patrons</NavLink>
+              <NavLink className="nav-link" to="/patrons">
+                Patrons
+              </NavLink>
             </Nav.Item>
+            <NavLink className="nav-link" to="/authors">
+              Authors
+            </NavLink>
+            <NavLink className="nav-link" to="/publishers">
+              Publishers
+            </NavLink>
+            <NavLink className="nav-link" to="/categories">
+              Categories
+            </NavLink>
+            <NavLink className="nav-link" to="/tags">
+              Tags
+            </NavLink>
           </Nav>
         </Navbar.Collapse>
       </Container>

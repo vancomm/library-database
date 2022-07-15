@@ -1,10 +1,10 @@
 #!/usr/bin/env node
 
 import dotenv from 'dotenv';
-import createDb from '../src/db/create-db.js';
+import fillDb from '../src/db/fill-db.js';
 
 dotenv.config();
 
 const dbPath = process.env.DATABASE_PATH;
 
-createDb(dbPath);
+fillDb(dbPath);

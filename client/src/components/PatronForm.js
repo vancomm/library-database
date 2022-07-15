@@ -6,7 +6,7 @@ import Button from 'react-bootstrap/Button';
 import { Formik } from 'formik';
 import * as yup from 'yup';
 
-export default function PatronForm({ postFn }) {
+export default function PatronForm({ submitFn, initialValues, buttons }) {
   const schema = yup.object().shape({
     firstName: yup.string().required('Enter a first name'),
     lastName: yup.string().required('Enter a last name'),
@@ -16,20 +16,14 @@ export default function PatronForm({ postFn }) {
 
   const onSubmit = async (values, { resetForm }) => {
     resetForm();
-    const res = await postFn(values);
-    console.log(res);
+    const res = await submitFn(values);
   };
 
   return (
     <Formik
       validationSchema={schema}
       onSubmit={onSubmit}
-      initialValues={{
-        firstName: '',
-        lastName: '',
-        phone: '',
-        email: '',
-      }}
+      initialValues={initialValues}
     >
       {({
         handleSubmit,
@@ -40,7 +34,7 @@ export default function PatronForm({ postFn }) {
       }) => (
         <Form noValidate onSubmit={handleSubmit}>
           <Row>
-            <Form.Group as={Col} md="4" controlId="firstName">
+            <Form.Group as={Col} controlId="firstName">
               <Form.Label>First name</Form.Label>
               <Form.Control
                 type="text"
@@ -52,7 +46,7 @@ export default function PatronForm({ postFn }) {
               />
               <Form.Control.Feedback type="invalid">{errors.firstName}</Form.Control.Feedback>
             </Form.Group>
-            <Form.Group as={Col} md="4" className="mb-3" controlId="lastName">
+            <Form.Group as={Col} className="mb-3" controlId="lastName">
               <Form.Label>Last name</Form.Label>
               <Form.Control
                 type="text"
@@ -66,7 +60,7 @@ export default function PatronForm({ postFn }) {
             </Form.Group>
           </Row>
           <Row>
-            <Form.Group as={Col} md="4" className="mb-3" controlId="phone">
+            <Form.Group as={Col} className="mb-3" controlId="phone">
               <Form.Label>Phone</Form.Label>
               <Form.Control
                 type="tel"
@@ -78,7 +72,7 @@ export default function PatronForm({ postFn }) {
               />
               <Form.Control.Feedback type="invalid">{errors.phone}</Form.Control.Feedback>
             </Form.Group>
-            <Form.Group as={Col} md="4" className="mb-3" controlId="email">
+            <Form.Group as={Col} className="mb-3" controlId="email">
               <Form.Label>Email</Form.Label>
               <Form.Control
                 type="email"
@@ -91,13 +85,18 @@ export default function PatronForm({ postFn }) {
               <Form.Control.Feedback type="invalid">{errors.email}</Form.Control.Feedback>
             </Form.Group>
           </Row>
-          <Button type="submit">Submit</Button>
+          {buttons}
         </Form>
       )}
     </Formik>
   );
 }
 
-PatronForm.propTypes = {
-  postFn: PropTypes.func.isRequired,
+PatronForm.defaultProps = {
+  initialValues: {
+    firstName: '',
+    lastName: '',
+    phone: '',
+    email: '',
+  },
 };

@@ -1,9 +1,9 @@
 import Container from 'react-bootstrap/Container';
 
-export default function Second() {
+export default function Authors() {
   return (
     <Container>
-      <h1>Second</h1>
+      <h1>Authors</h1>
     </Container>
   );
 }

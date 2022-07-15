@@ -1,9 +1,9 @@
 import Container from 'react-bootstrap/Container';
 
-export default function Home() {
+export default function Tags() {
   return (
     <Container>
-      <h1>Home</h1>
+      <h1>Tags</h1>
     </Container>
   );
 }
