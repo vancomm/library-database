@@ -1,0 +1,7 @@
+{
+  "ignore": [
+    "client/*",
+    "*/__tests__/*",
+    "*.rest"
+  ]
+}

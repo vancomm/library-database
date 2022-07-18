@@ -1,16 +1,16 @@
 /* eslint-disable no-underscore-dangle */
 import { fileURLToPath } from 'url';
 import path, { dirname } from 'path';
-import resetDb from '../reset-db.js';
-import connectToDb from '../connect-to-db.js';
-import execute from '../execute.js';
-import query from '../query.js';
+import resetDb from '../../scripts/reset-db.js';
+import deleteDb from '../../scripts/delete-db.js';
+import connectToDb from '../../connect-to-db.js';
+import execute from '../../execute.js';
+import query from '../../query.js';
 import insertOne from '../insert-one.js';
 import insertMany from '../insert-many.js';
 import select from '../select.js';
 import update from '../update.js';
 import remove from '../remove.js';
-import deleteDb from '../delete-db.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -107,7 +107,6 @@ describe('update', () => {
     await insertMany(db, 'test', fields, rows);
     await update(db, 'test', { rowA: 'A', rowB: 'B' }, { rowB: 'updated' });
     const actual = await select(db, 'test', fields);
-    console.log(actual);
     expect(actual.map((row) => Object.values(row))).toEqual(expected);
   });
 });

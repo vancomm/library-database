@@ -1,16 +1,15 @@
 import {
   useState, useEffect,
 } from 'react';
+import * as yup from 'yup';
 import Row from 'react-bootstrap/Row';
-import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container';
-import * as yup from 'yup';
 import RecordForm from '../components/RecordForm';
+import ModalWindow from '../components/ModalWindow.js';
 import PaginatedTable from '../components/PaginatedTable';
 import CollapsibleButton from '../components/CollapsibleButton';
 import Patron from '../services/Patron.service.js';
-import ModalWindow from './ModalWindow';
 
 function PatronForm({
   initialValues, fetchPatrons, buttons, direction,

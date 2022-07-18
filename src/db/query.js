@@ -1,14 +1,6 @@
-export default async function query(db, sql, firstRow = false) {
-  if (firstRow) {
-    return new Promise((resolve, reject) => {
-      db.get(sql, (e, row) => {
-        if (e) reject(e);
-        resolve(row);
-      });
-    });
-  }
+export default async function query(db, sql, params) {
   return new Promise((resolve, reject) => {
-    db.all(sql, (e, rows) => {
+    db.all(sql, params, (e, rows) => {
       if (e) reject(e);
       resolve(rows);
     });

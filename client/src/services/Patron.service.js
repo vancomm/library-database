@@ -1,6 +1,6 @@
-import { patronsRoute } from '../data/routes.js';
-import Service from './Service.js';
+import { patronsRoute } from '../data/routes';
+import Service from './Service';
 
-const Patron = new Service(patronsRoute);
+const PatronService = new Service(patronsRoute);
 
-export default Patron;
+export default PatronService;

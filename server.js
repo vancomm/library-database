@@ -2,13 +2,11 @@ import dotenv from 'dotenv';
 import express from 'express';
 import cors from 'cors';
 import connectToDb from './src/db/connect-to-db.js';
-import makeRouter from './src/db/make-router.js';
+import makeRouter from './src/make-router.js';
 
 dotenv.config();
 const port = process.env.PORT || 3000;
 const dbPath = process.env.DATABASE_PATH;
-
-console.log(dbPath);
 
 const db = connectToDb(dbPath);
 
@@ -19,6 +17,9 @@ app.use(express.json());
 
 app.use('/patrons', makeRouter(db, 'patron'));
 app.use('/authors', makeRouter(db, 'author'));
+app.use('/tags', makeRouter(db, 'tag'));
+app.use('/publishers', makeRouter(db, 'publisher'));
+app.use('/categories', makeRouter(db, 'category'));
 
 app.get('*', (req, res) => {
   res.send({ text: 'Hello world!' });

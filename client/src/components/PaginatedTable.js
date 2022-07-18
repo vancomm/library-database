@@ -6,7 +6,7 @@ import PaginationBar from './PaginationBar';
 import '../assets/table.css';
 
 export default function PaginatedTable({
-  headers, records, onEdit, onDelete, onLimitSubmit, onPageClick, limit, offset, total,
+  name, headers, records, onEdit, onDelete, onLimitSubmit, onPageClick, limit, offset, total,
 }) {
   return (
     <Container>
@@ -24,17 +24,21 @@ export default function PaginatedTable({
           <thead>
             <tr>
               {['#', 'Id', ...headers, 'Actions'].map((header) => (
-                <th key={header}>{header}</th>
+                <th
+                  key={`${name}-${header}`}
+                >
+                  {header}
+                </th>
               ))}
             </tr>
           </thead>
           <tbody>
             {records.length > 0
               ? records.map(({ id, data }, i) => (
-                <tr key={id}>
+                <tr key={`${name}-${id}`}>
                   <td>{offset + i + 1}</td>
                   <td>{id}</td>
-                  {data.map((d, j) => (<td key={`${id}-${headers[j]}`}>{d}</td>))}
+                  {data.map((d, j) => (<td key={`${name}-${id}-${headers[j]}`}>{d}</td>))}
                   <td>
                     <ActionButtons
                       onEdit={onEdit(id)}

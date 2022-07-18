@@ -1,6 +1,6 @@
-import { authorsRoute } from '../data/routes.js';
-import Service from './Service.js';
+import { authorsRoute } from '../data/routes';
+import Service from './Service';
 
-const Author = new Service(authorsRoute);
+const AuthorService = new Service(authorsRoute);
 
-export default Author;
+export default AuthorService;

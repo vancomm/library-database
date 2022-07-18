@@ -1,4 +1,4 @@
-import execute from './execute.js';
+import execute from '../execute.js';
 
 export default async function insertMany(db, table, fields, rows) {
   const placeholder = Array(rows.length).fill(`(${Array(fields.length).fill('?').join(',')})`).join(',');

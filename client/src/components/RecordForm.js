@@ -3,9 +3,10 @@ import Stack from 'react-bootstrap/Stack';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { Formik } from 'formik';
+import AsyncSelect from './AsyncSelect';
 
 export default function RecordForm({
-  schema, initialValues, formControls, submitFn, buttons, direction,
+  model, service, submitFn, buttons, direction,
 }) {
   const onSubmit = async (values, { resetForm }) => {
     resetForm();
@@ -14,8 +15,8 @@ export default function RecordForm({
 
   return (
     <Formik
-      validationSchema={schema}
-      initialValues={initialValues}
+      validationSchema={model.schema}
+      initialValues={model.defaultValues}
       onSubmit={onSubmit}
     >
       {({
@@ -31,7 +32,9 @@ export default function RecordForm({
               direction={direction}
               gap={3}
             >
-              {formControls.map(({ label, name, type }) => (
+              {model.formControls.map(({
+                label, name, type, placeholder, search,
+              }) => (
                 <Form.Group
                   key={`group-${name}`}
                   as={Col}
@@ -43,15 +46,26 @@ export default function RecordForm({
                   >
                     {label}
                   </Form.Label>
-                  <Form.Control
-                    key={`control-${name}`}
-                    type={type}
-                    name={name}
-                    placeholder={label}
-                    value={values[name]}
-                    onChange={handleChange}
-                    isInvalid={touched[name] && !!errors[name]}
-                  />
+                  {type === 'asyncTypeahead'
+                    ? (
+                      <AsyncSelect
+                        name={name}
+                        label={label}
+                        placeholder={placeholder}
+                        fetchFn={(query) => service.get({ limit: 10, [search]: `${query}%` })}
+                      />
+                    )
+                    : (
+                      <Form.Control
+                        key={`control-${name}`}
+                        type={type}
+                        name={name}
+                        placeholder={placeholder}
+                        value={values[name]}
+                        onChange={handleChange}
+                        isInvalid={touched[name] && !!errors[name]}
+                      />
+                    )}
                   <Form.Control.Feedback key={`fb-${name}`} type="invalid">{errors[name]}</Form.Control.Feedback>
                 </Form.Group>
               ))}

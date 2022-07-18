@@ -1,4 +1,4 @@
-import execute from './execute.js';
+import execute from '../execute.js';
 
 export default async function insertOne(db, table, data) {
   const [fields, values] = Object.entries(data).reduce((acc, [field, value]) => {
