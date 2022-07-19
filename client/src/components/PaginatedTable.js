@@ -6,7 +6,9 @@ import PaginationBar from './PaginationBar';
 import '../assets/table.css';
 
 export default function PaginatedTable({
-  name, headers, records, onEdit, onDelete, onLimitSubmit, onPageClick, limit, offset, total,
+  name, headers, records,
+  onEdit, onDelete, onLimitSubmit, onPageClick,
+  limit, offset, total,
 }) {
   return (
     <Container>
@@ -47,7 +49,7 @@ export default function PaginatedTable({
                   </td>
                 </tr>
               ))
-              : <tr><td colSpan="7">No records</td></tr>}
+              : <tr><td colSpan={headers.length + 3}>No records</td></tr>}
           </tbody>
         </Table>
       </Row>

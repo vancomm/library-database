@@ -1,38 +1,19 @@
 import * as yup from 'yup';
+import Model from './Model';
 
-const name = 'Tags';
-
-const schema = yup.object().shape({
-  name: yup.string().required('Enter tag\'s name'),
+const TagModel = new Model({
+  name: 'Tags',
+  schema: yup.object().shape({
+    name: yup.string().required('Enter tag\'s name'),
+  }),
+  formControls: [
+    {
+      label: 'Name',
+      name: 'name',
+      type: 'text',
+      placeholder: 'Tag name',
+    },
+  ],
 });
 
-const formControls = [
-  {
-    label: 'Name',
-    name: 'name',
-    type: 'text',
-    placeholder: 'Tag name',
-  },
-];
-
-const defaultValues = {
-  name: '',
-};
-
-const recordsToTable = (tags) => tags.map(({
-  id, ...rest
-}) => ({
-  id,
-  data: Object.values(rest),
-}));
-
-const recordToTitle = (tag) => tag.name;
-
-export default {
-  name,
-  schema,
-  formControls,
-  defaultValues,
-  recordsToTable,
-  recordToTitle,
-};
+export default TagModel;

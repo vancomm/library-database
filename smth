@@ -1,0 +1,16 @@
+select b.title title, p.name publisherName, a.firstName || ' ' || a.lastName authorName, c.name category, t.name tag
+FROM book b
+LEFT OUTER JOIN publisher p
+ON b.publisherId = p.id
+LEFT OUTER JOIN bookAuthor ba
+ON b.id = ba.bookId
+LEFT OUTER JOIN author a
+ON ba.authorId = a.id
+LEFT OUTER JOIN bookCategory bc
+ON b.id = bc.bookId
+LEFT OUTER JOIN category c
+ON bc.categoryId = c.id
+LEFT OUTER JOIN bookTag bt
+ON b.id = bt.bookId
+LEFT OUTER JOIN tag t
+ON bt.tagId = t.id;

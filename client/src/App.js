@@ -2,18 +2,19 @@ import { Routes, Route } from 'react-router-dom';
 import Navigation from './components/Navigation';
 import Page from './components/Page';
 import Home from './pages/Home.page';
-import Books from './pages/Books.page';
 import Borrows from './pages/Borrows.page';
 import PatronModel from './data/Patron.model';
 import AuthorModel from './data/Author.model';
+import TagModel from './data/Tag.model';
+import PublisherModel from './data/Publisher.model';
+import CategoryModel from './data/Category.model';
+import BookModel from './data/Book.model';
 import PatronService from './services/Patron.service';
 import AuthorService from './services/Author.service';
 import TagService from './services/Tag.service';
-import TagModel from './data/Tag.model';
 import PublisherService from './services/Publisher.service';
-import PublisherModel from './data/Publisher.model';
 import CategoryService from './services/Category.service';
-import CategoryModel from './data/Category.model';
+import BookService from './services/Book.service';
 
 function App() {
   return (
@@ -31,9 +32,18 @@ function App() {
             />
           )}
         />
-        <Route path="/books" element={<Books />} />
+        <Route
+          path="/books"
+          element={(
+            <Page
+              key="books"
+              service={BookService}
+              model={BookModel}
+              auxServices={{ authorId: AuthorService, publisherId: PublisherService }}
+            />
+          )}
+        />
         <Route path="/borrows" element={<Borrows />} />
-        {/* <Route path="/categories" element={<Categories />} /> */}
         <Route
           path="/categories"
           element={(
@@ -41,6 +51,7 @@ function App() {
               key="category"
               service={CategoryService}
               model={CategoryModel}
+              auxServices={{ parentId: CategoryService }}
             />
           )}
         />

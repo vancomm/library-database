@@ -12,6 +12,7 @@ import RecordForm from './RecordForm';
 export default function Page({
   service,
   model,
+  auxServices,
 }) {
   const [records, setRecords] = useState([]);
 
@@ -22,17 +23,59 @@ export default function Page({
   const [showModal, setShowModal] = useState(false);
   const [modalData, setModalData] = useState({});
 
+  const [showErrorModal, setShowErrorModal] = useState(false);
+  const [errorText, setErrorText] = useState('');
+
   const fetchRecords = async () => {
-    const {
-      records: _records,
-      count,
-    } = await service.get({ limit, offset });
-    setRecords(_records);
-    setTotal(count);
+    const res = await service.get({ limit, offset });
+    setRecords(res.records);
+    setTotal(res.count);
+  };
+
+  const onInsert = async (record) => {
+    await service.postOne(record);
+    await fetchRecords();
+  };
+
+  const onEdit = (id) => (e) => {
+    e.target.blur();
+    const edited = records.find((r) => r.id === id);
+    setModalData(edited);
+    setShowModal(true);
+  };
+
+  const onDelete = (id) => async () => {
+    const res = await service.deleteOne(id);
+    if (res.status === 200) {
+      await fetchRecords();
+      return;
+    }
+
+    const { message } = await res.json();
+    setErrorText(message);
+    setShowErrorModal(true);
+  };
+
+  const onLimitSubmit = (input) => (e) => {
+    e.preventDefault();
+    if (Math.ceil(offset / limit + 1) > Math.ceil(total / input)) {
+      setOffset(input * (Math.ceil(total / input - 1)));
+    }
+    setLimit(input);
+  };
+
+  const onPageClick = (pageNum) => async () => {
+    setOffset(limit * (pageNum - 1));
   };
 
   const handleCloseModal = () => {
     setShowModal(false);
+  };
+
+  const onUpdate = async (record) => {
+    await service.updateOne(record);
+    await fetchRecords();
+    handleCloseModal();
   };
 
   useEffect(() => {
@@ -50,11 +93,9 @@ export default function Page({
             <RecordForm
               direction="horizontal"
               model={model}
-              service={service}
-              submitFn={async (record) => {
-                await service.postOne(record);
-                await fetchRecords();
-              }}
+              auxServices={auxServices}
+              initialValues={model.defaultValues}
+              submitFn={onInsert}
               buttons={<Button type="submit" variant="success">Submit</Button>}
             />
           </CollapsibleButton>
@@ -62,28 +103,12 @@ export default function Page({
 
         <PaginatedTable
           name={model.name}
-          headers={model.formControls.map(({ label }) => label)}
+          headers={model.headers}
           records={model.recordsToTable(records)}
-          onEdit={(id) => (e) => {
-            e.target.blur();
-            const edited = records.find((r) => r.id === id);
-            setModalData(edited);
-            setShowModal(true);
-          }}
-          onDelete={(id) => async () => {
-            await service.deleteOne(id);
-            await fetchRecords();
-          }}
-          onLimitSubmit={(input) => (e) => {
-            e.preventDefault();
-            if (Math.ceil(offset / limit + 1) > Math.ceil(total / input)) {
-              setOffset(input * (Math.ceil(total / input - 1)));
-            }
-            setLimit(input);
-          }}
-          onPageClick={(pageNum) => async () => {
-            setOffset(limit * (pageNum - 1));
-          }}
+          onEdit={onEdit}
+          onDelete={onDelete}
+          onLimitSubmit={onLimitSubmit}
+          onPageClick={onPageClick}
           limit={limit}
           offset={offset}
           total={total}
@@ -97,14 +122,10 @@ export default function Page({
         handleClose={handleCloseModal}
       >
         <RecordForm
-          schema={model.schema}
+          model={model}
+          service={service}
           initialValues={modalData}
-          formControls={model.formControls}
-          submitFn={async (record) => {
-            await service.updateOne(record);
-            await fetchRecords();
-            handleCloseModal();
-          }}
+          submitFn={onUpdate}
           buttons={(
             <div className="float-end">
               <Button variant="secondary" onClick={handleCloseModal}>Cancel</Button>
@@ -114,6 +135,15 @@ export default function Page({
           )}
         />
       </ModalWindow>
+
+      <ModalWindow
+        title="Error"
+        show={showErrorModal}
+        handleClose={() => setShowErrorModal(false)}
+      >
+        <span>{errorText}</span>
+      </ModalWindow>
+
     </>
   );
 }

@@ -28,7 +28,7 @@ export default function createDb(dbPath) {
   publisherId   INTEGER NOT NULL,
   title         TEXT,
   publishedDate TEXT,
-  pagesCount    INTEGER,
+  pages         INTEGER,
 
   FOREIGN KEY(publisherId) REFERENCES publisher(id)
 )`);
@@ -83,7 +83,7 @@ export default function createDb(dbPath) {
   email     TEXT
 )`);
 
-  db.run(`CREATE TABLE book_author(
+  db.run(`CREATE TABLE bookAuthor(
   bookId    INTEGER NOT NULL,
   authorId  INTEGER NOT NULL,
 
@@ -98,7 +98,7 @@ export default function createDb(dbPath) {
   name  TEXT NOT NULL
 )`);
 
-  db.run(`CREATE TABLE book_tag(
+  db.run(`CREATE TABLE bookTag(
   bookId INTEGER NOT NULL,
   tagId  INTEGER NOT NULL,
 
@@ -116,7 +116,7 @@ export default function createDb(dbPath) {
   FOREIGN KEY(parentId) REFERENCES category(id)
 )`);
 
-  db.run(`CREATE TABLE book_category(
+  db.run(`CREATE TABLE bookCategory(
   bookId      INTEGER NOT NULL,
   categoryId  INTEGER NOT NULL,
 

@@ -1,3 +1,4 @@
+import { useRef } from 'react';
 import Form from 'react-bootstrap/Form';
 import Stack from 'react-bootstrap/Stack';
 import Row from 'react-bootstrap/Row';
@@ -6,17 +7,27 @@ import { Formik } from 'formik';
 import AsyncSelect from './AsyncSelect';
 
 export default function RecordForm({
-  model, service, submitFn, buttons, direction,
+  model, initialValues, submitFn, buttons, direction,
 }) {
+  const typeaheadRefs = model.formControls
+    .reduce((acc, { type, name }) => (type === 'asyncTypeahead'
+      ? { ...acc, [name]: useRef() }
+      : acc), {});
+
   const onSubmit = async (values, { resetForm }) => {
+    const record = model.cleanRecord(values);
+    // console.log(record);
     resetForm();
-    await submitFn(values);
+    Object.values(typeaheadRefs).forEach((taRef) => {
+      taRef.current.clear();
+    });
+    await submitFn(record);
   };
 
   return (
     <Formik
       validationSchema={model.schema}
-      initialValues={model.defaultValues}
+      initialValues={initialValues}
       onSubmit={onSubmit}
     >
       {({
@@ -32,18 +43,11 @@ export default function RecordForm({
               direction={direction}
               gap={3}
             >
-              {model.formControls.map(({
-                label, name, type, placeholder, search,
+              {model.formControls.slice(0, 4).map(({
+                label, name, type, placeholder, multiple, labelKey, fetchFn,
               }) => (
-                <Form.Group
-                  key={`group-${name}`}
-                  as={Col}
-                  controlId={name}
-                >
-                  <Form.Label
-                    key={`label-${name}`}
-                    className="mx-1"
-                  >
+                <Form.Group key={`group-${name}`} as={Col} controlId={name}>
+                  <Form.Label key={`label-${name}`} className="mx-1">
                     {label}
                   </Form.Label>
                   {type === 'asyncTypeahead'
@@ -52,21 +56,69 @@ export default function RecordForm({
                         name={name}
                         label={label}
                         placeholder={placeholder}
-                        fetchFn={(query) => service.get({ limit: 10, [search]: `${query}%` })}
+                        initialValue={initialValues.parentName}
+                        labelKey={labelKey}
+                        multiple={multiple}
+                        fetchFn={fetchFn(10)}
+                        refProp={typeaheadRefs[name]}
                       />
                     )
                     : (
-                      <Form.Control
-                        key={`control-${name}`}
-                        type={type}
-                        name={name}
-                        placeholder={placeholder}
-                        value={values[name]}
-                        onChange={handleChange}
-                        isInvalid={touched[name] && !!errors[name]}
-                      />
+                      <>
+                        <Form.Control
+                          key={`control-${name}`}
+                          type={type}
+                          name={name}
+                          placeholder={placeholder}
+                          value={values[name]}
+                          onChange={handleChange}
+                          isInvalid={touched[name] && !!errors[name]}
+                        />
+                        <Form.Control.Feedback key={`fb-${name}`} type="invalid">{errors[name]}</Form.Control.Feedback>
+                      </>
                     )}
-                  <Form.Control.Feedback key={`fb-${name}`} type="invalid">{errors[name]}</Form.Control.Feedback>
+                </Form.Group>
+              ))}
+            </Stack>
+            <Stack
+              direction={direction}
+              gap={3}
+              className="mt-3"
+            >
+              {model.formControls.slice(4).map(({
+                label, name, type, placeholder, multiple, labelKey, fetchFn,
+              }) => (
+                <Form.Group key={`group-${name}`} as={Col} controlId={name}>
+                  <Form.Label key={`label-${name}`} className="mx-1">
+                    {label}
+                  </Form.Label>
+                  {type === 'asyncTypeahead'
+                    ? (
+                      <AsyncSelect
+                        name={name}
+                        label={label}
+                        placeholder={placeholder}
+                        initialValue={initialValues.parentName}
+                        labelKey={labelKey}
+                        multiple={multiple}
+                        fetchFn={fetchFn(10)}
+                        refProp={typeaheadRefs[name]}
+                      />
+                    )
+                    : (
+                      <>
+                        <Form.Control
+                          key={`control-${name}`}
+                          type={type}
+                          name={name}
+                          placeholder={placeholder}
+                          value={values[name]}
+                          onChange={handleChange}
+                          isInvalid={touched[name] && !!errors[name]}
+                        />
+                        <Form.Control.Feedback key={`fb-${name}`} type="invalid">{errors[name]}</Form.Control.Feedback>
+                      </>
+                    )}
                 </Form.Group>
               ))}
             </Stack>

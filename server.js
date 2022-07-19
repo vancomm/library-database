@@ -20,9 +20,13 @@ app.use('/authors', makeRouter(db, 'author'));
 app.use('/tags', makeRouter(db, 'tag'));
 app.use('/publishers', makeRouter(db, 'publisher'));
 app.use('/categories', makeRouter(db, 'category'));
+app.use('/books', makeRouter(db, 'book'));
+app.use('/bookauthor', makeRouter(db, 'bookAuthor'));
+app.use('/booktag', makeRouter(db, 'bookTag'));
+app.use('/bookcategory', makeRouter(db, 'bookCategory'));
 
 app.get('*', (req, res) => {
-  res.send({ text: 'Hello world!' });
+  res.status(418).send({ message: '=)' });
 });
 
 app.listen(port, console.log(`Server listening on port http://localhost:${port}`));

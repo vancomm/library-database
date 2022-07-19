@@ -1,19 +1,42 @@
 export default class Service {
-  #apiRoute;
+  apiRoute;
 
   constructor(apiRoute) {
-    this.#apiRoute = apiRoute;
+    this.apiRoute = apiRoute;
   }
 
   async get(params) {
-    const urlWithParams = `${this.#apiRoute}?${new URLSearchParams(params)}`;
+    const urlWithParams = `${this.apiRoute}?${new URLSearchParams(params)}`;
     const res = await fetch(urlWithParams);
     return res.json();
   }
 
+  async getComplex(params) {
+    const res = await fetch(
+      `${this.apiRoute}/get`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(params),
+      },
+    );
+    return res.json();
+  }
+
+  find(limit, search, start = true, end = false) {
+    return (query) => this.getComplex({
+      limit,
+      where: {
+        [search]: `${start ? '' : '%'}${query}${end ? '' : '%'}`,
+      },
+    });
+  }
+
   async postOne(record) {
     const res = await fetch(
-      this.#apiRoute,
+      this.apiRoute,
       {
         method: 'POST',
         headers: {
@@ -22,28 +45,26 @@ export default class Service {
         body: JSON.stringify(record),
       },
     );
-    return res;
+    return res.json();
   }
 
   async deleteOne(id) {
-    const res = await fetch(this.#apiRoute, {
+    return fetch(this.apiRoute, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({ id }),
     });
-    return res;
   }
 
   async updateOne(record) {
-    const res = await fetch(this.#apiRoute, {
+    return fetch(this.apiRoute, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(record),
     });
-    return res;
   }
 }
