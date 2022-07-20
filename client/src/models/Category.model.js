@@ -31,10 +31,10 @@ const CategoryModel = new Model({
     'Name', 'Parent category',
   ],
   recordsToTable: (category) => category.map(({
-    id, ...data
+    id, name, parentCategory,
   }) => ({
     id,
-    data: [data.name, data.parentName],
+    data: [name, parentCategory?.name],
   })),
   cleanRecord: (values) => ({
     id: values.id, name: values.name, parentId: values.parentId,

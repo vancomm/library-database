@@ -27,14 +27,20 @@ export default function Page({
   const [errorText, setErrorText] = useState('');
 
   const fetchRecords = async () => {
-    const res = await service.get({ limit, offset });
+    const res = await service.getSimple({ limit, offset });
     setRecords(res.records);
-    setTotal(res.count);
+    setTotal(res.total);
   };
 
   const onInsert = async (record) => {
-    await service.postOne(record);
-    await fetchRecords();
+    const res = await service.postOne(record);
+    if (res.status === 200) {
+      await fetchRecords();
+    } else {
+      const { message } = await res.json();
+      setErrorText(message);
+      setShowErrorModal(true);
+    }
   };
 
   const onEdit = (id) => (e) => {
@@ -48,12 +54,11 @@ export default function Page({
     const res = await service.deleteById(id);
     if (res.status === 200) {
       await fetchRecords();
-      return;
+    } else {
+      const { message } = await res.json();
+      setErrorText(message);
+      setShowErrorModal(true);
     }
-
-    const { message } = await res.json();
-    setErrorText(message);
-    setShowErrorModal(true);
   };
 
   const onLimitSubmit = (input) => (e) => {
@@ -73,9 +78,18 @@ export default function Page({
   };
 
   const onUpdate = async (record) => {
-    await service.updateOne(record);
-    await fetchRecords();
-    handleCloseModal();
+    const { id, ...data } = record;
+    const res = await service.updateById(id, data);
+    // await service.updateOne(record);
+    if (res.status === 200) {
+      await fetchRecords();
+      handleCloseModal();
+    } else {
+      const { message } = await res.json();
+      setErrorText(message);
+      handleCloseModal();
+      setShowErrorModal(true);
+    }
   };
 
   useEffect(() => {

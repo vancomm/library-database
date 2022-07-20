@@ -1,10 +1,8 @@
+import db from '../db.js';
 import resetDb from './reset-db.js';
-import connectToDb from '../connect-to-db.js';
 
 export default function createDb(dbPath) {
   resetDb(dbPath);
-
-  const db = connectToDb(dbPath);
 
   db.run(`CREATE TABLE patron(
   id        INTEGER PRIMARY KEY AUTOINCREMENT,

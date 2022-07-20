@@ -1,7 +1,7 @@
 import query from '../query.js';
 import buildWhere from '../utils/build-where.js';
 
-export default async function select(db, table, params) {
+export default async function select(table, params) {
   const {
     alias, columns, join, limit, offset, where,
   } = params;
@@ -40,5 +40,5 @@ export default async function select(db, table, params) {
   if (offset) parts.push(`OFFSET ${offset}`);
 
   const sql = parts.join(' ');
-  return query(db, sql, values);
+  return query(sql, values);
 }

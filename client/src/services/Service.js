@@ -5,11 +5,11 @@ export default class Service {
     this.apiRoute = apiRoute;
   }
 
-  // async get(params) {
-  //   const urlWithParams = `${this.apiRoute}?${new URLSearchParams(params)}`;
-  //   const res = await fetch(urlWithParams);
-  //   return res.json();
-  // }
+  async getSimple(params) {
+    const urlWithParams = `${this.apiRoute}?${new URLSearchParams(params)}`;
+    const res = await fetch(urlWithParams);
+    return res.json();
+  }
 
   async get(params) {
     const res = await fetch(
@@ -26,8 +26,10 @@ export default class Service {
   }
 
   async getById(id) {
-    const { records: [record] } = await this.get({ limit: 1, where: { id } });
-    return record;
+    return fetch(`${this.apiRoute}/${id}`);
+
+    // const { records: [record] } = await this.get({ limit: 1, where: { id } });
+    // return record;
   }
 
   find(limit, search, start = true, end = false) {
@@ -64,7 +66,18 @@ export default class Service {
   }
 
   async deleteById(id) {
-    return this.delete({ where: { id } });
+    return fetch(`${this.apiRoute}/${id}`, { method: 'DELETE' });
+    // return this.delete({ where: { id } });
+  }
+
+  async updateById(id, data) {
+    return fetch(`${this.apiRoute}/${id}`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    });
   }
 
   async updateOne(record) {

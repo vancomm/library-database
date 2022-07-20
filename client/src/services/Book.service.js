@@ -10,48 +10,6 @@ import TagService from './Tag.service';
 
 const BookService = new Service(booksRoute);
 
-BookService.get = async function get(params) {
-  const res = await fetch(
-    `${this.apiRoute}/get`,
-    {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(params),
-    },
-  );
-  const { count, records } = await res.json();
-
-  const populated = await Promise.all(records.map(async (book) => {
-    const publisher = await PublisherService.getById(book.publisherId);
-
-    const { records: bookAuthors } = await BookAuthorService.get({
-      where: { bookId: book.id },
-    });
-    const authors = await Promise.all(bookAuthors
-      .map(({ authorId }) => AuthorService.getById(authorId)));
-
-    const { records: bookCategories } = await BookCategoryService.get({
-      where: { bookId: book.id },
-    });
-    const categories = await Promise.all(bookCategories
-      .map(({ categoryId }) => CategoryService.getById(categoryId)));
-
-    const { records: bookTags } = await BookTagService.get({
-      where: { bookId: book.id },
-    });
-    const tags = await Promise.all(bookTags
-      .map(({ tagId }) => TagService.getById(tagId)));
-
-    return {
-      ...book, publisher, authors, categories, tags,
-    };
-  }));
-
-  return { count, records: populated };
-};
-
 BookService.deleteById = async function deleteById(id) {
   await BookAuthorService.delete({ where: { bookId: id } });
   await BookCategoryService.delete({ where: { bookId: id } });

@@ -1,6 +1,6 @@
 import execute from '../execute.js';
 
-export default async function insertMany(db, table, fields, rows) {
+export default async function insertMany(table, fields, rows) {
   const placeholder = Array(rows.length)
     .fill(`(${Array(fields.length)
       .fill('?')
@@ -8,5 +8,5 @@ export default async function insertMany(db, table, fields, rows) {
     .join(',');
   const sql = `INSERT INTO ${table}(${fields.join(',')}) VALUES ${placeholder}`;
   const values = rows.flat();
-  return execute(db, sql, values);
+  return execute(sql, values);
 }
