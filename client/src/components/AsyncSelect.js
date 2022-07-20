@@ -13,30 +13,15 @@ export default function AsyncSelect({
   const [isLoading, setIsLoading] = useState(false);
   const [options, setOptions] = useState([]);
 
-  const setSingleSelections = (selected) => {
-    const value = selected.length > 0
-      ? selected[0].id
-      : null;
-    helper.setValue(value);
-  };
-
-  const setMultiSelections = (selected) => {
-    const value = selected.length > 0
-      ? selected.map(({ id }) => id)
-      : null;
-    helper.setValue(value);
-  };
-
   return (
     <>
       <div className={cn({ 'is-invalid': !!meta.error && meta.touched })}>
         <AsyncTypeahead
           id={name}
           labelKey={labelKey}
-          defaultInputValue={initialValue || ''}
           placeholder={placeholder}
           ref={refProp}
-          onChange={multiple ? setMultiSelections : setSingleSelections}
+          onChange={helper.setValue}
           onSearch={async (query) => {
             setIsLoading(true);
             const res = await fetchFn(query);
@@ -46,6 +31,7 @@ export default function AsyncSelect({
           isLoading={isLoading}
           options={options}
           multiple={multiple}
+          defaultSelected={initialValue}
           isInvalid={!!meta.error && meta.touched}
         />
       </div>

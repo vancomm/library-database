@@ -1,6 +1,7 @@
 import execute from '../execute.js';
 
 export default async function insertMany(table, fields, rows) {
+  if (rows.length < 1) return Promise.resolve();
   const placeholder = Array(rows.length)
     .fill(`(${Array(fields.length)
       .fill('?')

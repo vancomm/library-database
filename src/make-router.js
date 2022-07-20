@@ -70,8 +70,8 @@ export default function makeRouter(model) {
     try {
       const record = req.body;
       console.log(`Received record to insert into table ${model.table}:\n${objToString(record)}`);
-      const data = await model.insert(record);
-      res.status(200).json(data);
+      const id = await model.insert(record);
+      res.status(200).json({ id });
     } catch (err) {
       res.status(409).json({ message: `Cannot post this entry. ${err}` });
     }

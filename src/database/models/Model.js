@@ -23,8 +23,8 @@ export default class Model {
     return select(this.table, { where: { id } });
   }
 
-  async insert(record) {
-    return insertOne(this.table, record);
+  async insert(data) {
+    return insertOne(this.table, data);
   }
 
   async remove(params) {

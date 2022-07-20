@@ -71,7 +71,8 @@
 
 .clock .hand.second {
   --back: 25%;
-  --back-color: rgb(34, 119, 70);
+  /* --back-color: rgb(34, 119, 70); */
+  --back-color: rgb(33, 143, 79);
   width: 2px;
   height: 65%;
   z-index: 100;

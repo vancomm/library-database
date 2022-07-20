@@ -12,7 +12,9 @@ export default class Model {
     },
   ) {
     this.name = name;
+
     this.schema = schema;
+
     this.formControls = formControls;
 
     this.defaultValues = { ...formControls.reduce((acc, control) => ({ ...acc, [control.name]: '' }), {}), ...defaultValues };
@@ -22,7 +24,7 @@ export default class Model {
     this.recordsToTable = recordsToTable || ((records) => records
       .map(({ id, ...rest }) => ({ id, data: Object.values(rest) })));
 
-    this.cleanRecord = cleanRecord || ((values) => values);
+    this.cleanRecord = cleanRecord || ((record) => record);
 
     this.recordToTitle = recordToTitle || ((record) => record.name);
   }

@@ -5,13 +5,12 @@ export default class Service {
     this.apiRoute = apiRoute;
   }
 
-  async getSimple(params) {
+  async get(params) {
     const urlWithParams = `${this.apiRoute}?${new URLSearchParams(params)}`;
-    const res = await fetch(urlWithParams);
-    return res.json();
+    return fetch(urlWithParams);
   }
 
-  async get(params) {
+  async getThruPost(params) {
     const res = await fetch(
       `${this.apiRoute}/get`,
       {
@@ -27,13 +26,10 @@ export default class Service {
 
   async getById(id) {
     return fetch(`${this.apiRoute}/${id}`);
-
-    // const { records: [record] } = await this.get({ limit: 1, where: { id } });
-    // return record;
   }
 
   find(limit, search, start = true, end = false) {
-    return (query) => this.get({
+    return (query) => this.getThruPost({
       limit,
       where: {
         [search]: `${start ? '' : '%'}${query}${end ? '' : '%'}`,
@@ -42,7 +38,7 @@ export default class Service {
   }
 
   async postOne(record) {
-    const res = await fetch(
+    return fetch(
       this.apiRoute,
       {
         method: 'POST',
@@ -52,7 +48,6 @@ export default class Service {
         body: JSON.stringify(record),
       },
     );
-    return res.json();
   }
 
   async delete(params) {
@@ -67,7 +62,6 @@ export default class Service {
 
   async deleteById(id) {
     return fetch(`${this.apiRoute}/${id}`, { method: 'DELETE' });
-    // return this.delete({ where: { id } });
   }
 
   async updateById(id, data) {

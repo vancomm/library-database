@@ -17,15 +17,18 @@ const CategoryModel = new Model({
     },
     {
       label: 'Parent category',
-      name: 'parentId',
+      name: 'parentCategory',
       placeholder: 'Search for a category...',
       type: 'asyncTypeahead',
       labelKey: (category) => category.name,
-      fetchFn: (limit) => (query) => CategoryService.get({ limit, where: { name: `${query}%` } }),
+      // fetchFn: (limit) => (query) =>
+      //   CategoryService.getThruPost({ limit, where: { name: `${query}%` } }),
+      fetchFn: (limit) => CategoryService.find(limit, 'name'),
     },
   ],
   defaultValues: {
     parentId: null,
+    parentCategory: [],
   },
   headers: [
     'Name', 'Parent category',
@@ -34,10 +37,10 @@ const CategoryModel = new Model({
     id, name, parentCategory,
   }) => ({
     id,
-    data: [name, parentCategory?.name],
+    data: [name, parentCategory[0]?.name],
   })),
-  cleanRecord: (values) => ({
-    id: values.id, name: values.name, parentId: values.parentId,
+  cleanRecord: ({ id, name, parentCategory }) => ({
+    id, name, parentId: parentCategory[0]?.id,
   }),
 });
 

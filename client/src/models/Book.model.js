@@ -15,10 +15,10 @@ const BookModel = new Model({
     title: yup.string().required('Enter a title'),
     publishedDate: yup.date().required('Enter a date'),
     pages: yup.number().integer().required('Enter number of pages'),
-    publisherId: yup.number().integer().nullable().required('Select a publisher'),
-    authorIds: yup.array().of(yup.number().integer()).min(1, 'Select one or more authors'),
-    categoryIds: yup.array(yup.number().integer(('Select one or more categories'))),
-    tagIds: yup.array(yup.number().integer('Select one or more tags')),
+    publisher: yup.array().of(yup.object()).length(1, 'Select a publisher'),
+    authors: yup.array().of(yup.object()).min(1, 'Select one or more authors'),
+    categories: yup.array().of(yup.object()),
+    tags: yup.array().of(yup.object()),
   }),
   formControls: [
     {
@@ -41,7 +41,7 @@ const BookModel = new Model({
     },
     {
       label: 'Publisher',
-      name: 'publisherId',
+      name: 'publisher',
       type: 'asyncTypeahead',
       placeholder: 'Search for a publisher...',
       labelKey: (publisher) => publisher.name,
@@ -49,7 +49,7 @@ const BookModel = new Model({
     },
     {
       label: 'Authors',
-      name: 'authorIds',
+      name: 'authors',
       type: 'asyncTypeahead',
       placeholder: 'Search for an author...',
       multiple: true,
@@ -58,7 +58,7 @@ const BookModel = new Model({
     },
     {
       label: 'Categories',
-      name: 'categoryIds',
+      name: 'categories',
       type: 'asyncTypeahead',
       placeholder: 'Search for a category...',
       multiple: true,
@@ -67,7 +67,7 @@ const BookModel = new Model({
     },
     {
       label: 'Tags',
-      name: 'tagIds',
+      name: 'tags',
       type: 'asyncTypeahead',
       placeholder: 'Search for a tag...',
       multiple: true,
@@ -77,9 +77,10 @@ const BookModel = new Model({
   ],
   defaultValues: {
     publisherId: null,
-    authorIds: [],
-    categoryIds: [],
-    tagIds: [],
+    publisher: [],
+    authors: [],
+    categories: [],
+    tags: [],
   },
   headers: ['Title', 'Pages', 'Publisher', 'Publication date', 'Authors', 'Categories', 'Tags'],
   recordsToTable: (books) => books.map(({
@@ -87,12 +88,24 @@ const BookModel = new Model({
   }) => {
     const res = ({
       id,
-      data: [title, pages, PublisherModel.recordToTitle(publisher), publishedDate,
+      data: [title, pages, PublisherModel.recordToTitle(publisher[0]), publishedDate,
         authors.map(AuthorModel.recordToTitle).join(', '),
         categories.map(CategoryModel.recordToTitle).join(', '),
         tags.map(TagModel.recordToTitle).join(', ')],
     });
     return res;
+  }),
+  cleanRecord: ({
+    id, title, publisherId, publishedDate, pages, authors, categories, tags,
+  }) => ({
+    id,
+    title,
+    publisherId,
+    publishedDate,
+    pages,
+    authorIds: authors.map((author) => author.id),
+    categoryIds: categories.map((category) => category.id),
+    tagIds: tags.map((tag) => tag.id),
   }),
   recordToTitle: (book) => book.title,
 });

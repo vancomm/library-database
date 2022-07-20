@@ -39,7 +39,6 @@ function App() {
               key="books"
               service={BookService}
               model={BookModel}
-              auxServices={{ authorId: AuthorService, publisherId: PublisherService }}
             />
           )}
         />
@@ -51,7 +50,6 @@ function App() {
               key="category"
               service={CategoryService}
               model={CategoryModel}
-              auxServices={{ parentId: CategoryService }}
             />
           )}
         />

@@ -12,7 +12,6 @@ import RecordForm from './RecordForm';
 export default function Page({
   service,
   model,
-  auxServices,
 }) {
   const [records, setRecords] = useState([]);
 
@@ -27,12 +26,19 @@ export default function Page({
   const [errorText, setErrorText] = useState('');
 
   const fetchRecords = async () => {
-    const res = await service.getSimple({ limit, offset });
-    setRecords(res.records);
-    setTotal(res.total);
+    const res = await service.get({ limit, offset });
+    if (res.status === 200) {
+      const payload = await res.json();
+      setRecords(payload.records);
+      setTotal(payload.total);
+    } else {
+      const { message } = await res.json();
+      setErrorText(message);
+      setShowErrorModal(true);
+    }
   };
 
-  const onInsert = async (record) => {
+  const handleInsert = async (record) => {
     const res = await service.postOne(record);
     if (res.status === 200) {
       await fetchRecords();
@@ -43,14 +49,15 @@ export default function Page({
     }
   };
 
-  const onEdit = (id) => (e) => {
+  const handleEdit = (id) => (e) => {
     e.target.blur();
     const edited = records.find((r) => r.id === id);
     setModalData(edited);
     setShowModal(true);
   };
 
-  const onDelete = (id) => async () => {
+  const handleDelete = (id) => async (e) => {
+    e.target.blur();
     const res = await service.deleteById(id);
     if (res.status === 200) {
       await fetchRecords();
@@ -61,7 +68,7 @@ export default function Page({
     }
   };
 
-  const onLimitSubmit = (input) => (e) => {
+  const handleLimitSubmit = (input) => (e) => {
     e.preventDefault();
     if (Math.ceil(offset / limit + 1) > Math.ceil(total / input)) {
       setOffset(input * (Math.ceil(total / input - 1)));
@@ -69,7 +76,7 @@ export default function Page({
     setLimit(input);
   };
 
-  const onPageClick = (pageNum) => async () => {
+  const setPage = (pageNum) => async () => {
     setOffset(limit * (pageNum - 1));
   };
 
@@ -77,10 +84,9 @@ export default function Page({
     setShowModal(false);
   };
 
-  const onUpdate = async (record) => {
+  const handleUpdate = async (record) => {
     const { id, ...data } = record;
     const res = await service.updateById(id, data);
-    // await service.updateOne(record);
     if (res.status === 200) {
       await fetchRecords();
       handleCloseModal();
@@ -107,9 +113,8 @@ export default function Page({
             <RecordForm
               direction="horizontal"
               model={model}
-              auxServices={auxServices}
               initialValues={model.defaultValues}
-              submitFn={onInsert}
+              submitFn={handleInsert}
               buttons={<Button type="submit" variant="success">Submit</Button>}
             />
           </CollapsibleButton>
@@ -119,10 +124,10 @@ export default function Page({
           name={model.name}
           headers={model.headers}
           records={model.recordsToTable(records)}
-          onEdit={onEdit}
-          onDelete={onDelete}
-          onLimitSubmit={onLimitSubmit}
-          onPageClick={onPageClick}
+          onEdit={handleEdit}
+          onDelete={handleDelete}
+          onLimitSubmit={handleLimitSubmit}
+          onPageClick={setPage}
           limit={limit}
           offset={offset}
           total={total}
@@ -139,7 +144,7 @@ export default function Page({
           model={model}
           service={service}
           initialValues={modalData}
-          submitFn={onUpdate}
+          submitFn={handleUpdate}
           buttons={(
             <div className="float-end">
               <Button variant="secondary" onClick={handleCloseModal}>Cancel</Button>

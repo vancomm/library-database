@@ -7,7 +7,7 @@ CategoryModel.get = async function get(params) {
   const categories = await select(this.table, params);
 
   const populatedCategories = Promise.all(categories.map(async (category) => {
-    const [parentCategory] = await select(this.table, {
+    const parentCategory = await select(this.table, {
       where: {
         id: category.parentId,
       },
