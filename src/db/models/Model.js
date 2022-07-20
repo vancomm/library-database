@@ -1,8 +1,8 @@
-import insertOne from './crud/insert-one.js';
-import remove from './crud/remove.js';
-import select from './crud/select.js';
-import update from './crud/update.js';
-import count from './utils/count.js';
+import insertOne from '../crud/insert-one.js';
+import remove from '../crud/remove.js';
+import select from '../crud/select.js';
+import update from '../crud/update.js';
+import count from '../utils/count.js';
 
 export default class Model {
   table;
@@ -23,8 +23,8 @@ export default class Model {
     return insertOne(db, this.table, record);
   }
 
-  async removeById(db, id) {
-    return remove(db, this.table, { id });
+  async remove(db, params) {
+    return remove(db, this.table, params);
   }
 
   async updateById(db, id, data) {

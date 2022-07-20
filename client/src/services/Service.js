@@ -5,13 +5,13 @@ export default class Service {
     this.apiRoute = apiRoute;
   }
 
-  async get(params) {
-    const urlWithParams = `${this.apiRoute}?${new URLSearchParams(params)}`;
-    const res = await fetch(urlWithParams);
-    return res.json();
-  }
+  // async get(params) {
+  //   const urlWithParams = `${this.apiRoute}?${new URLSearchParams(params)}`;
+  //   const res = await fetch(urlWithParams);
+  //   return res.json();
+  // }
 
-  async getComplex(params) {
+  async get(params) {
     const res = await fetch(
       `${this.apiRoute}/get`,
       {
@@ -25,8 +25,13 @@ export default class Service {
     return res.json();
   }
 
+  async getById(id) {
+    const { records: [record] } = await this.get({ limit: 1, where: { id } });
+    return record;
+  }
+
   find(limit, search, start = true, end = false) {
-    return (query) => this.getComplex({
+    return (query) => this.get({
       limit,
       where: {
         [search]: `${start ? '' : '%'}${query}${end ? '' : '%'}`,
@@ -48,14 +53,18 @@ export default class Service {
     return res.json();
   }
 
-  async deleteOne(id) {
+  async delete(params) {
     return fetch(this.apiRoute, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ id }),
+      body: JSON.stringify(params),
     });
+  }
+
+  async deleteById(id) {
+    return this.delete({ where: { id } });
   }
 
   async updateOne(record) {

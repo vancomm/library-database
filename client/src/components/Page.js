@@ -45,7 +45,7 @@ export default function Page({
   };
 
   const onDelete = (id) => async () => {
-    const res = await service.deleteOne(id);
+    const res = await service.deleteById(id);
     if (res.status === 200) {
       await fetchRecords();
       return;

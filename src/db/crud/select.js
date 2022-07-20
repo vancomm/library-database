@@ -1,4 +1,5 @@
 import query from '../query.js';
+import buildWhere from '../utils/build-where.js';
 
 export default async function select(db, table, params) {
   const {
@@ -24,13 +25,14 @@ export default async function select(db, table, params) {
   }
 
   if (where) {
-    const wherePlaceholder = Object.entries(where)
-      .map(([field, value]) => (/[%_]/.test(value)
-        ? `${field} LIKE ?`
-        : `${field} = ?`))
-      .join(' AND ');
-    parts.push(`WHERE ${wherePlaceholder}`);
-    values.push(...Object.values(where));
+    // const wherePlaceholder = Object.entries(where)
+    //   .map(([field, value]) => (/[%_]/.test(value)
+    //     ? `${field} LIKE ?`
+    //     : `${field} = ?`))
+    //   .join(' AND ');
+    const [whereClause, whereValues] = buildWhere(where);
+    parts.push(whereClause);
+    values.push(...whereValues);
   }
 
   if (limit) parts.push(`LIMIT ${limit}`);

@@ -1,0 +1,108 @@
+/* @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+TC&display=swap'); */
+
+.clock * {
+  box-sizing: border-box;
+  /* font-family: 'Noto Serif TC', serif; */
+}
+
+.clock {
+  width: 250px;
+  height: 250px;
+  background-color: rgba(255, 255, 255, .8);
+  /* background-color: #fffaf0; */
+  border-radius: 50%;
+  border: 4px solid black;
+  position: relative;
+  font-size: 1.5rem;
+}
+
+.clock::before {
+  --size: 7px;
+  content: '';
+  position: absolute;
+  background-color: white;
+  z-index: 120;
+  width: var(--size);
+  height: var(--size);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+}
+
+.clock::after {
+  --size: 15px;
+  content: '';
+  position: absolute;
+  background-color: black;
+  z-index: 110;
+  width: var(--size);
+  height: var(--size);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+}
+
+.clock .number {
+  --rotation: 30deg;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  transform: rotate(calc(var(--rotation) * var(--hour)));
+}
+
+.clock .number .inner {
+  transform: rotate(calc(-1 * var(--rotation) * var(--hour)));
+}
+
+.clock .hand {
+  --back: 20%;
+  position: absolute;
+  bottom: 50%;
+  left: 50%;
+  background-color: black;
+  transform-origin: bottom;
+  transform-origin: 50% calc(100% - var(--back));
+  /* transform: translate(-50%, var(--back)); */
+  transform: translate(-50%, var(--back)) rotate(calc(var(--rotation) * 1deg));
+}
+
+.clock .hand.second {
+  --back: 25%;
+  --back-color: rgb(34, 119, 70);
+  width: 2px;
+  height: 65%;
+  z-index: 100;
+  background-image: linear-gradient(to top, var(--back-color), var(--back-color) var(--back), transparent var(--back), transparent 100%);
+  background-image: -webkit-linear-gradient(bottom, var(--back-color), var(--back-color) var(--back), transparent var(--back), transparent 100%);
+}
+
+.clock .hand.minute {
+  --back: 15%;
+  width: 4px;
+  height: 57%;
+  z-index: 90;
+}
+
+.clock .hand.hour {
+  --back: 20%;
+  width: 6px;
+  height: 40%;
+  z-index: 80;
+}
+
+.clock .text {
+  display: none;
+  border: 2px solid black;
+  border-radius: 5px;
+  background-color: #cccccc;
+  padding: 0 2px;
+  position: absolute;
+  left: 50%;
+  top: 65%;
+  transform: translateX(-50%);
+  font-size: 1rem;
+  font-family: monospace;
+}

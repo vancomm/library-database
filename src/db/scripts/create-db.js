@@ -83,6 +83,19 @@ export default function createDb(dbPath) {
   email     TEXT
 )`);
 
+  db.run(`CREATE TABLE category(
+  id        INTEGER PRIMARY KEY AUTOINCREMENT,
+  name      TEXT NOT NULL,
+  parentId  INTEGER,
+
+  FOREIGN KEY(parentId) REFERENCES category(id)
+)`);
+
+  db.run(`CREATE TABLE tag(
+  id    INTEGER PRIMARY KEY AUTOINCREMENT,
+  name  TEXT NOT NULL
+)`);
+
   db.run(`CREATE TABLE bookAuthor(
   bookId    INTEGER NOT NULL,
   authorId  INTEGER NOT NULL,
@@ -93,9 +106,14 @@ export default function createDb(dbPath) {
   FOREIGN KEY(authorId) REFERENCES author(id)
 )`);
 
-  db.run(`CREATE TABLE tag(
-  id    INTEGER PRIMARY KEY AUTOINCREMENT,
-  name  TEXT NOT NULL
+  db.run(`CREATE TABLE bookCategory(
+  bookId      INTEGER NOT NULL,
+  categoryId  INTEGER NOT NULL,
+
+  PRIMARY KEY(bookId, categoryId),
+
+  FOREIGN KEY(bookId) REFERENCES book(id),
+  FOREIGN KEY(categoryId) REFERENCES category(id)
 )`);
 
   db.run(`CREATE TABLE bookTag(
@@ -106,23 +124,5 @@ export default function createDb(dbPath) {
 
   FOREIGN KEY(bookId) REFERENCES book(id),
   FOREIGN KEY(tagId) REFERENCES tag(id)
-)`);
-
-  db.run(`CREATE TABLE category(
-  id        INTEGER PRIMARY KEY AUTOINCREMENT,
-  name      TEXT NOT NULL,
-  parentId  INTEGER,
-
-  FOREIGN KEY(parentId) REFERENCES category(id)
-)`);
-
-  db.run(`CREATE TABLE bookCategory(
-  bookId      INTEGER NOT NULL,
-  categoryId  INTEGER NOT NULL,
-
-  PRIMARY KEY(bookId, categoryId),
-
-  FOREIGN KEY(bookId) REFERENCES book(id),
-  FOREIGN KEY(categoryId) REFERENCES category(id)
 )`);
 }

@@ -21,7 +21,7 @@ const CategoryModel = new Model({
       placeholder: 'Search for a category...',
       type: 'asyncTypeahead',
       labelKey: (category) => category.name,
-      fetchFn: (limit) => (query) => CategoryService.getComplex({ limit, where: { name: `${query}%` } }),
+      fetchFn: (limit) => (query) => CategoryService.get({ limit, where: { name: `${query}%` } }),
     },
   ],
   defaultValues: {

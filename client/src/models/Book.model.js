@@ -3,7 +3,11 @@ import AuthorService from '../services/Author.service';
 import CategoryService from '../services/Category.service';
 import PublisherService from '../services/Publisher.service';
 import TagService from '../services/Tag.service';
+import AuthorModel from './Author.model';
+import CategoryModel from './Category.model';
 import Model from './Model';
+import PublisherModel from './Publisher.model';
+import TagModel from './Tag.model';
 
 const BookModel = new Model({
   name: 'Books',
@@ -77,6 +81,19 @@ const BookModel = new Model({
     categoryIds: [],
     tagIds: [],
   },
+  headers: ['Title', 'Pages', 'Publisher', 'Publication date', 'Authors', 'Categories', 'Tags'],
+  recordsToTable: (books) => books.map(({
+    id, title, pages, publisher, publishedDate, authors, categories, tags,
+  }) => {
+    const res = ({
+      id,
+      data: [title, pages, PublisherModel.recordToTitle(publisher), publishedDate,
+        authors.map(AuthorModel.recordToTitle).join(', '),
+        categories.map(CategoryModel.recordToTitle).join(', '),
+        tags.map(TagModel.recordToTitle).join(', ')],
+    });
+    return res;
+  }),
   recordToTitle: (book) => book.title,
 });
 
