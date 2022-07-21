@@ -11,6 +11,7 @@ import BookModel from './src/database/models/Book.model.js';
 import BookAuthorModel from './src/database/models/BookAuthor.model.js';
 import BookTagModel from './src/database/models/BookTag.model.js';
 import BookCategoryModel from './src/database/models/BookCategory.model.js';
+import CopyModel from './src/database/models/Copy.model.js';
 
 dotenv.config();
 const port = process.env.PORT || 3000;
@@ -29,6 +30,7 @@ app.use('/books', makeRouter(BookModel));
 app.use('/bookauthor', makeRouter(BookAuthorModel));
 app.use('/booktag', makeRouter(BookTagModel));
 app.use('/bookcategory', makeRouter(BookCategoryModel));
+app.use('/copy', makeRouter(CopyModel));
 
 app.get('*', (req, res) => {
   res.status(418).send({ message: '=)' });

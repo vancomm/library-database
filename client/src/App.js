@@ -2,6 +2,7 @@ import { Routes, Route } from 'react-router-dom';
 import Navigation from './components/Navigation';
 import TagPage from './pages/Tag.page';
 import BookPage from './pages/Book.page';
+import CopyPage from './pages/Copy.page';
 import HomePage from './pages/Home.page';
 import AuthorPage from './pages/Author.page';
 import BorrowPage from './pages/Borrow.page';
@@ -22,6 +23,7 @@ export default function App() {
         <Route path="/patrons" element={<PatronPage />} />
         <Route path="/publishers" element={<PublisherPage />} />
         <Route path="/tags" element={<TagPage />} />
+        <Route path="/copies" element={<CopyPage />} />
       </Routes>
     </>
   );

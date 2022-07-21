@@ -5,8 +5,8 @@ import Row from 'react-bootstrap/Row';
 import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container';
 import CollapsibleButton from './CollapsibleButton';
-import PaginatedTable from './PaginatedTable';
 import ModalWindow from './ModalWindow';
+import PaginatedTable from './PaginatedTable';
 import RecordForm from './RecordForm';
 
 export default function Page({
@@ -29,6 +29,7 @@ export default function Page({
     const res = await service.get({ limit, offset });
     if (res.status === 200) {
       const payload = await res.json();
+      // console.log(payload);
       setRecords(payload.records);
       setTotal(payload.total);
     } else {
@@ -121,9 +122,10 @@ export default function Page({
         </Row>
 
         <PaginatedTable
+          model={model}
           name={model.name}
           headers={model.headers}
-          records={model.recordsToTable(records)}
+          records={records}
           onEdit={handleEdit}
           onDelete={handleDelete}
           onLimitSubmit={handleLimitSubmit}

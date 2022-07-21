@@ -96,11 +96,11 @@ const BookModel = new Model({
     return res;
   }),
   cleanRecord: ({
-    id, title, publisherId, publishedDate, pages, authors, categories, tags,
+    id, title, publisher, publishedDate, pages, authors, categories, tags,
   }) => ({
     id,
     title,
-    publisherId,
+    publisherId: publisher[0].id,
     publishedDate,
     pages,
     authorIds: authors.map((author) => author.id),

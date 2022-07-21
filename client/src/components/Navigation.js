@@ -20,6 +20,11 @@ export default function Navigation() {
               </NavLink>
             </Nav.Item>
             <Nav.Item>
+              <NavLink className="nav-link" to="/copies">
+                Copies
+              </NavLink>
+            </Nav.Item>
+            <Nav.Item>
               <NavLink className="nav-link" to="/borrows">
                 Borrows
               </NavLink>

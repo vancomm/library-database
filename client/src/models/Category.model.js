@@ -5,8 +5,8 @@ import CategoryService from '../services/Category.service';
 const CategoryModel = new Model({
   name: 'Categories',
   schema: yup.object().shape({
-    name: yup.string().required('Enter a first name'),
-    parentId: yup.number().integer().nullable(),
+    name: yup.string().required('Enter category name'),
+    parentCategory: yup.array().of(yup.object()),
   }),
   formControls: [
     {

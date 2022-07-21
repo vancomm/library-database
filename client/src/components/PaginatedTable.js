@@ -6,10 +6,23 @@ import PaginationBar from './PaginationBar';
 import '../assets/table.css';
 
 export default function PaginatedTable({
-  name, headers, records,
+  model, records,
   onEdit, onDelete, onLimitSubmit, onPageClick,
   limit, offset, total,
 }) {
+  const rows = records.length > 0
+    ? model.recordsToTable(records).map(({ id, data }, i) => (
+      <tr key={`${model.name}-${id}`}>
+        <td>{offset + i + 1}</td>
+        <td>{id}</td>
+        {data.map((d, j) => (
+          <td key={`${model.name}-${id}-${model.headers[j]}`}>{d}</td>
+        ))}
+        <td><ActionButtons onEdit={onEdit(id)} onDelete={onDelete(id)} /></td>
+      </tr>
+    ))
+    : <tr><td colSpan={model.headers.length + 3}>No records</td></tr>;
+
   return (
     <Container>
       <Row>
@@ -25,31 +38,13 @@ export default function PaginatedTable({
         <Table>
           <thead>
             <tr>
-              {['#', 'Id', ...headers, 'Actions'].map((header) => (
-                <th
-                  key={`${name}-${header}`}
-                >
-                  {header}
-                </th>
+              {['#', 'Id', ...model.headers, 'Actions'].map((header) => (
+                <th key={`${model.name}-${header}`}>{header}</th>
               ))}
             </tr>
           </thead>
           <tbody>
-            {records.length > 0
-              ? records.map(({ id, data }, i) => (
-                <tr key={`${name}-${id}`}>
-                  <td>{offset + i + 1}</td>
-                  <td>{id}</td>
-                  {data.map((d, j) => (<td key={`${name}-${id}-${headers[j]}`}>{d}</td>))}
-                  <td>
-                    <ActionButtons
-                      onEdit={onEdit(id)}
-                      onDelete={onDelete(id)}
-                    />
-                  </td>
-                </tr>
-              ))
-              : <tr><td colSpan={headers.length + 3}>No records</td></tr>}
+            {rows}
           </tbody>
         </Table>
       </Row>

@@ -15,3 +15,5 @@ export const bookAuthorRoute = 'http://localhost:3001/bookauthor';
 export const bookTagRoute = 'http://localhost:3001/booktag';
 
 export const bookCategoryRoute = 'http://localhost:3001/bookcategory';
+
+export const copyRoute = 'http://localhost:3001/copy';
