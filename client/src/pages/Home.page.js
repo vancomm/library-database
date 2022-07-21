@@ -1,7 +1,7 @@
 import Container from 'react-bootstrap/Container';
 import Clock from '../components/Clock';
 
-export default function Home() {
+export default function HomePage() {
   return (
     <Container>
       <h1>Home</h1>

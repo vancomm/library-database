@@ -1,91 +1,28 @@
 import { Routes, Route } from 'react-router-dom';
 import Navigation from './components/Navigation';
-import Page from './components/Page';
-import Home from './pages/Home.page';
-import Borrows from './pages/Borrows.page';
-import PatronModel from './models/Patron.model';
-import AuthorModel from './models/Author.model';
-import TagModel from './models/Tag.model';
-import PublisherModel from './models/Publisher.model';
-import CategoryModel from './models/Category.model';
-import BookModel from './models/Book.model';
-import PatronService from './services/Patron.service';
-import AuthorService from './services/Author.service';
-import TagService from './services/Tag.service';
-import PublisherService from './services/Publisher.service';
-import CategoryService from './services/Category.service';
-import BookService from './services/Book.service';
+import TagPage from './pages/Tag.page';
+import BookPage from './pages/Book.page';
+import HomePage from './pages/Home.page';
+import AuthorPage from './pages/Author.page';
+import BorrowPage from './pages/Borrow.page';
+import PatronPage from './pages/Patron.page';
+import CategoryPage from './pages/Category.page';
+import PublisherPage from './pages/Publisher.page';
 
-function App() {
+export default function App() {
   return (
     <>
       <Navigation />
       <Routes>
-        <Route path="/" element={<Home />} />
-        <Route
-          path="/authors"
-          element={(
-            <Page
-              key="authors"
-              service={AuthorService}
-              model={AuthorModel}
-            />
-          )}
-        />
-        <Route
-          path="/books"
-          element={(
-            <Page
-              key="books"
-              service={BookService}
-              model={BookModel}
-            />
-          )}
-        />
-        <Route path="/borrows" element={<Borrows />} />
-        <Route
-          path="/categories"
-          element={(
-            <Page
-              key="category"
-              service={CategoryService}
-              model={CategoryModel}
-            />
-          )}
-        />
-        <Route
-          path="/patrons"
-          element={(
-            <Page
-              key="patrons"
-              service={PatronService}
-              model={PatronModel}
-            />
-          )}
-        />
-        <Route
-          path="/publishers"
-          element={(
-            <Page
-              key="publishers"
-              service={PublisherService}
-              model={PublisherModel}
-            />
-          )}
-        />
-        <Route
-          path="/tags"
-          element={(
-            <Page
-              key="tags"
-              service={TagService}
-              model={TagModel}
-            />
-          )}
-        />
+        <Route path="/" element={<HomePage />} />
+        <Route path="/authors" element={<AuthorPage />} />
+        <Route path="/books" element={<BookPage />} />
+        <Route path="/borrows" element={<BorrowPage />} />
+        <Route path="/categories" element={<CategoryPage />} />
+        <Route path="/patrons" element={<PatronPage />} />
+        <Route path="/publishers" element={<PublisherPage />} />
+        <Route path="/tags" element={<TagPage />} />
       </Routes>
     </>
   );
 }
-
-export default App;
