@@ -4,6 +4,15 @@
   font-family: 'Roboto', sans-serif;
 } */
 
+/* @font-face {
+  font-family: 'Helvetica Light';
+  src: url('https://cdn.jsdelivr.net/npm/helvetica-original@1.0.0/Light/Helvetica-Light.woff') format('woff');
+}
+
+* {
+  font-family: 'Helvetica Light';
+} */
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',

@@ -1,0 +1,86 @@
+/* body {
+  background: linear-gradient(to right, #00aaff, #00ff6c);
+} */
+
+.calculator *,
+.calculator *::after,
+.calculator *::before {
+  box-sizing: border-box;
+}
+
+.calculator {
+  /* background-color: #777; */
+  display: grid;
+  align-content: center;
+  width: fit-content;
+  grid-template-columns: repeat(4, 80px);
+  grid-template-rows: minmax(100px, auto) repeat(5, 80px);
+}
+
+.screen {
+  grid-column: 1 / -1;
+  background-color: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-around;
+  flex-direction: column;
+  padding: 10px;
+  word-wrap: break-word;
+  word-break: break-all;
+  margin: 0 1px;
+  position: relative;
+}
+
+.screen::after {
+  content: 'fix me!';
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  color: rgba(255, 255, 255, 0.7);
+  font: italic 1em 'Arial', sans-serif;
+}
+
+.screen .previous-operand {
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 1.1rem;
+}
+
+.screen .current-operand {
+  color: white;
+  font-size: 2rem;
+}
+
+.calculator [class*='btn'] {
+  --color: 188, 188, 188;
+  background-color: rgba(var(--color), 0.75);
+  cursor: pointer;
+  font-size: 1.7rem;
+  border: 1px solid white;
+  outline: none;
+}
+
+.calculator [class*='btn']:hover {
+  background-color: rgba(var(--color), 0.9);
+  /* border: none; */
+  /* box-shadow: 0 3px 3px black; */
+  /* z-index: 100; */
+}
+
+.calculator .op-btn {
+  --color: 255, 140, 0;
+}
+
+.calculator .num-btn {
+  --color: 70, 70, 70;
+  color: white;
+}
+
+
+.span-2 {
+  grid-column: span 2;
+}
+
+/* .calculator *:hover {
+  box-shadow: 0 3px 3px black;
+  z-index: 100;
+} */

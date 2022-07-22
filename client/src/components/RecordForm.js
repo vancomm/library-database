@@ -5,11 +5,14 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { Formik } from 'formik';
 import AsyncSelect from './AsyncSelect';
+import { useModel } from '../contexts/ModelContext';
 import chunks from '../utils/chunks';
 
 export default function RecordForm({
-  model, initialValues, submitFn, buttons, direction,
+  initialValues, submitFn, buttons, direction,
 }) {
+  const { model } = useModel();
+
   const typeaheadRefs = model.formControls
     .reduce((acc, { type, name }) => (type === 'asyncTypeahead' ? { ...acc, [name]: useRef() } : acc), {});
 

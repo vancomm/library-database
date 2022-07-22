@@ -3,13 +3,16 @@ import Table from 'react-bootstrap/Table';
 import Container from 'react-bootstrap/Container';
 import ActionButtons from './ActionButtons';
 import PaginationBar from './PaginationBar';
+import { useModel } from '../contexts/ModelContext';
 import '../assets/table.css';
 
 export default function PaginatedTable({
-  model, records,
+  records,
   onEdit, onDelete, onLimitSubmit, onPageClick,
   limit, offset, total,
 }) {
+  const { model } = useModel();
+
   const rows = records.length > 0
     ? model.recordsToTable(records).map(({ id, data }, i) => (
       <tr key={`${model.name}-${id}`}>

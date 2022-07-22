@@ -123,4 +123,11 @@ export default function createDb(dbPath) {
   FOREIGN KEY(bookId) REFERENCES book(id),
   FOREIGN KEY(tagId) REFERENCES tag(id)
 )`);
+
+  db.run(`CREATE TABLE user(
+    id        INTEGER PRIMARY KEY AUTOINCREMENT,
+    username  TEXT NOT NULL,
+    role      TEXT NOT NULL,
+    hash      TEXT NOT NULL
+)`);
 }

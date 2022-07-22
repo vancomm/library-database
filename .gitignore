@@ -3,3 +3,5 @@ old
 *.db
 *.rest
 script.js
+*.pem
+.env

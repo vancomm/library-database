@@ -8,22 +8,28 @@ import CollapsibleButton from './CollapsibleButton';
 import ModalWindow from './ModalWindow';
 import PaginatedTable from './PaginatedTable';
 import RecordForm from './RecordForm';
+import { useModel } from '../contexts/ModelContext';
+import { useService } from '../contexts/ServiceContext';
 
-export default function Page({
-  service,
-  model,
-}) {
+export default function Page() {
+  const { model } = useModel();
+  const { service } = useService();
+
   const [records, setRecords] = useState([]);
 
   const [limit, setLimit] = useState(100);
   const [offset, setOffset] = useState(0);
   const [total, setTotal] = useState(null);
 
-  const [showModal, setShowModal] = useState(false);
-  const [modalData, setModalData] = useState({});
+  const [showUpdateModal, setShowUpdateModal] = useState(false);
+  const [updateModalData, setUpdateModalData] = useState({});
 
   const [showErrorModal, setShowErrorModal] = useState(false);
   const [errorText, setErrorText] = useState('');
+
+  const setPage = (pageNum) => async () => {
+    setOffset(limit * (pageNum - 1));
+  };
 
   const fetchRecords = async () => {
     const res = await service.get({ limit, offset });
@@ -53,8 +59,8 @@ export default function Page({
   const handleEdit = (id) => (e) => {
     e.target.blur();
     const edited = records.find((r) => r.id === id);
-    setModalData(edited);
-    setShowModal(true);
+    setUpdateModalData(edited);
+    setShowUpdateModal(true);
   };
 
   const handleDelete = (id) => async (e) => {
@@ -77,12 +83,8 @@ export default function Page({
     setLimit(input);
   };
 
-  const setPage = (pageNum) => async () => {
-    setOffset(limit * (pageNum - 1));
-  };
-
-  const handleCloseModal = () => {
-    setShowModal(false);
+  const handleCloseUpdateModal = () => {
+    setShowUpdateModal(false);
   };
 
   const handleUpdate = async (record) => {
@@ -90,11 +92,11 @@ export default function Page({
     const res = await service.updateById(id, data);
     if (res.status === 200) {
       await fetchRecords();
-      handleCloseModal();
+      handleCloseUpdateModal();
     } else {
       const { message } = await res.json();
       setErrorText(message);
-      handleCloseModal();
+      handleCloseUpdateModal();
       setShowErrorModal(true);
     }
   };
@@ -113,7 +115,6 @@ export default function Page({
           <CollapsibleButton btnText="New">
             <RecordForm
               direction="horizontal"
-              model={model}
               initialValues={model.defaultValues}
               submitFn={handleInsert}
               buttons={<Button type="submit" variant="success">Submit</Button>}
@@ -122,9 +123,6 @@ export default function Page({
         </Row>
 
         <PaginatedTable
-          model={model}
-          name={model.name}
-          headers={model.headers}
           records={records}
           onEdit={handleEdit}
           onDelete={handleDelete}
@@ -138,18 +136,16 @@ export default function Page({
       </Container>
 
       <ModalWindow
-        title={model.recordToTitle(modalData)}
-        show={showModal}
-        handleClose={handleCloseModal}
+        title={model.recordToTitle(updateModalData)}
+        show={showUpdateModal}
+        handleClose={handleCloseUpdateModal}
       >
         <RecordForm
-          model={model}
-          service={service}
-          initialValues={modalData}
+          initialValues={updateModalData}
           submitFn={handleUpdate}
           buttons={(
             <div className="float-end">
-              <Button variant="secondary" onClick={handleCloseModal}>Cancel</Button>
+              <Button variant="secondary" onClick={handleCloseUpdateModal}>Cancel</Button>
               {' '}
               <Button type="submit" variant="primary">Update</Button>
             </div>

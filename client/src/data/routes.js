@@ -1,19 +1,19 @@
-export const patronsRoute = 'http://localhost:3001/patrons';
+export const patronsRoute = 'https://localhost:3001/patrons';
 
-export const authorsRoute = 'http://localhost:3001/authors';
+export const authorsRoute = 'https://localhost:3001/authors';
 
-export const booksRoute = 'http://localhost:3001/books';
+export const booksRoute = 'https://localhost:3001/books';
 
-export const tagsRoute = 'http://localhost:3001/tags';
+export const tagsRoute = 'https://localhost:3001/tags';
 
-export const publishersRoute = 'http://localhost:3001/publishers';
+export const publishersRoute = 'https://localhost:3001/publishers';
 
-export const categoriesRoute = 'http://localhost:3001/categories';
+export const categoriesRoute = 'https://localhost:3001/categories';
 
-export const bookAuthorRoute = 'http://localhost:3001/bookauthor';
+export const bookAuthorRoute = 'https://localhost:3001/bookauthor';
 
-export const bookTagRoute = 'http://localhost:3001/booktag';
+export const bookTagRoute = 'https://localhost:3001/booktag';
 
-export const bookCategoryRoute = 'http://localhost:3001/bookcategory';
+export const bookCategoryRoute = 'https://localhost:3001/bookcategory';
 
-export const copyRoute = 'http://localhost:3001/copy';
+export const copyRoute = 'https://localhost:3001/copy';

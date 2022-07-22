@@ -1,7 +1,7 @@
 import Model from './Model.js';
 import select from '../crud/select.js';
 import insertMany from '../crud/insert-many.js';
-import range from '../utils/range.js';
+import range from '../../utils/range.js';
 
 const CopyModel = new Model('copy');
 

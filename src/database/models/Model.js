@@ -19,6 +19,16 @@ export default class Model {
     return select(this.table, params);
   }
 
+  async findOne(params) {
+    const [one] = await select(this.table, { where: params });
+    return one;
+  }
+
+  async exists(params) {
+    const res = await select(this.table, { where: params });
+    return res.length > 0;
+  }
+
   async getById(id) {
     return select(this.table, { where: { id } });
   }

@@ -1,6 +1,8 @@
 /* @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+TC&display=swap'); */
 
-.clock * {
+.clock *,
+.clock *::after,
+.clock *::before {
   box-sizing: border-box;
   /* font-family: 'Noto Serif TC', serif; */
 }
