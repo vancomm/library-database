@@ -10,8 +10,10 @@ import PaginatedTable from './PaginatedTable';
 import RecordForm from './RecordForm';
 import { useModel } from '../contexts/ModelContext';
 import { useService } from '../contexts/ServiceContext';
+import { useAuth } from '../contexts/AuthContext';
 
-export default function Page() {
+export default function RecordPage() {
+  const { token } = useAuth();
   const { model } = useModel();
   const { service } = useService();
 
@@ -32,10 +34,9 @@ export default function Page() {
   };
 
   const fetchRecords = async () => {
-    const res = await service.get({ limit, offset });
+    const res = await service.get({ limit, offset }, token);
     if (res.status === 200) {
       const payload = await res.json();
-      // console.log(payload);
       setRecords(payload.records);
       setTotal(payload.total);
     } else {
@@ -46,7 +47,7 @@ export default function Page() {
   };
 
   const handleInsert = async (record) => {
-    const res = await service.postOne(record);
+    const res = await service.postOne(record, token);
     if (res.status === 200) {
       await fetchRecords();
     } else {
@@ -65,7 +66,7 @@ export default function Page() {
 
   const handleDelete = (id) => async (e) => {
     e.target.blur();
-    const res = await service.deleteById(id);
+    const res = await service.deleteById(id, token);
     if (res.status === 200) {
       await fetchRecords();
     } else {
@@ -89,7 +90,7 @@ export default function Page() {
 
   const handleUpdate = async (record) => {
     const { id, ...data } = record;
-    const res = await service.updateById(id, data);
+    const res = await service.updateById(id, data, token);
     if (res.status === 200) {
       await fetchRecords();
       handleCloseUpdateModal();

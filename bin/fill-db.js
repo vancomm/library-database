@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 import dotenv from 'dotenv';
-import fillDb from '../src/db/scripts/fill-db.js';
+import fillDb from '../src/database/scripts/fill-db.js';
 
 dotenv.config();
 

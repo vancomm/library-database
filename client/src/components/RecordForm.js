@@ -7,10 +7,12 @@ import { Formik } from 'formik';
 import AsyncSelect from './AsyncSelect';
 import { useModel } from '../contexts/ModelContext';
 import chunks from '../utils/chunks';
+import { useAuth } from '../contexts/AuthContext';
 
 export default function RecordForm({
   initialValues, submitFn, buttons, direction,
 }) {
+  const { token } = useAuth();
   const { model } = useModel();
 
   const typeaheadRefs = model.formControls
@@ -18,11 +20,11 @@ export default function RecordForm({
 
   const onSubmit = async (values, { resetForm }) => {
     console.log({ values });
-    const record = model.cleanRecord(values);
-    console.log(record);
-    await submitFn(record);
-    resetForm();
-    Object.values(typeaheadRefs).forEach((taRef) => { taRef.current.clear(); });
+    // const record = model.cleanRecord(values);
+    // console.log(record);
+    // await submitFn(record);
+    // resetForm();
+    // Object.values(typeaheadRefs).forEach((taRef) => { taRef.current.clear(); });
   };
 
   return (
@@ -43,37 +45,78 @@ export default function RecordForm({
             {chunks(model.formControls, 4).map((controls, i) => (
               <Stack key={`${controls[0].name}`} as={Row} direction={direction} gap={3} className={i > 0 && 'mt-3'}>
                 {controls.map(({
-                  label, name, type, placeholder, multiple, labelKey, fetchFn,
+                  label, name, type, placeholder, ...rest
                 }) => (
                   <Form.Group key={`group-${name}`} as={Col} controlId={name}>
                     <Form.Label key={`label-${name}`} className="mx-1">{label}</Form.Label>
-                    {type === 'asyncTypeahead'
-                      ? (
-                        <AsyncSelect
-                          name={name}
-                          label={label}
-                          placeholder={placeholder}
-                          initialValue={initialValues[name]}
-                          labelKey={labelKey}
-                          multiple={multiple}
-                          fetchFn={fetchFn(10)}
-                          refProp={typeaheadRefs[name]}
-                        />
-                      )
-                      : (
-                        <>
-                          <Form.Control
-                            key={`control-${name}`}
-                            type={type}
-                            name={name}
-                            placeholder={placeholder}
-                            value={values[name]}
-                            onChange={handleChange}
-                            isInvalid={touched[name] && !!errors[name]}
-                          />
-                          <Form.Control.Feedback key={`fb-${name}`} type="invalid">{errors[name]}</Form.Control.Feedback>
-                        </>
-                      )}
+                    {(() => {
+                      switch (type) {
+                        case 'asyncTypeahead': {
+                          const { multiple, labelKey, fetchFn } = rest;
+                          return (
+                            <AsyncSelect
+                              name={name}
+                              label={label}
+                              placeholder={placeholder}
+                              initialValue={initialValues[name]}
+                              labelKey={labelKey}
+                              multiple={multiple}
+                              fetchFn={fetchFn(10, token)}
+                              refProp={typeaheadRefs[name]}
+                            />
+                          );
+                        }
+                        case 'select': {
+                          const { options } = rest;
+                          return (
+                            <>
+                              <Form.Select
+                                key={`control-${name}`}
+                                type={type}
+                                name={name}
+                                placeholder={placeholder}
+                                value={values[name]}
+                                onChange={handleChange}
+                                isInvalid={touched[name] && !!errors[name]}
+                              >
+                                <option>{placeholder}</option>
+                                {options.map(({ text, value }) => (
+                                  <option key={`control-${name}-option-${value}`} value={value}>{text}</option>
+                                ))}
+                              </Form.Select>
+
+                              <Form.Control.Feedback
+                                key={`fb-${name}`}
+                                type="invalid"
+                              >
+                                {errors[name]}
+                              </Form.Control.Feedback>
+                            </>
+                          );
+                        }
+                        default: {
+                          return (
+                            <>
+                              <Form.Control
+                                key={`control-${name}`}
+                                type={type}
+                                name={name}
+                                placeholder={placeholder}
+                                value={values[name]}
+                                onChange={handleChange}
+                                isInvalid={touched[name] && !!errors[name]}
+                              />
+                              <Form.Control.Feedback
+                                key={`fb-${name}`}
+                                type="invalid"
+                              >
+                                {errors[name]}
+                              </Form.Control.Feedback>
+                            </>
+                          );
+                        }
+                      }
+                    })()}
                   </Form.Group>
                 ))}
               </Stack>

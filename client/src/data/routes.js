@@ -10,10 +10,16 @@ export const publishersRoute = 'https://localhost:3001/publishers';
 
 export const categoriesRoute = 'https://localhost:3001/categories';
 
-export const bookAuthorRoute = 'https://localhost:3001/bookauthor';
+export const bookAuthorRoute = 'https://localhost:3001/bookauthors';
 
-export const bookTagRoute = 'https://localhost:3001/booktag';
+export const bookTagRoute = 'https://localhost:3001/booktags';
 
-export const bookCategoryRoute = 'https://localhost:3001/bookcategory';
+export const bookCategoryRoute = 'https://localhost:3001/bookcategories';
 
-export const copyRoute = 'https://localhost:3001/copy';
+export const copyRoute = 'https://localhost:3001/copies';
+
+export const loginRoute = 'https://localhost:3001/login';
+
+export const registerRoute = 'https://localhost:3001/register';
+
+export const usersRoute = 'https://localhost:3001/users';

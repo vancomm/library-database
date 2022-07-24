@@ -1,4 +1,4 @@
-import Page from '../components/Page';
+import RecordPage from '../components/RecordPage';
 import { ModelProvider } from '../contexts/ModelContext';
 import { ServiceProvider } from '../contexts/ServiceContext';
 import CategoryModel from '../models/Category.model';
@@ -8,7 +8,7 @@ export default function CategoryPage() {
   return (
     <ModelProvider model={CategoryModel}>
       <ServiceProvider service={CategoryService}>
-        <Page />
+        <RecordPage />
       </ServiceProvider>
     </ModelProvider>
   );

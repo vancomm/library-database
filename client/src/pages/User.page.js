@@ -1,13 +1,13 @@
 import RecordPage from '../components/RecordPage';
 import { ModelProvider } from '../contexts/ModelContext';
 import { ServiceProvider } from '../contexts/ServiceContext';
-import BookModel from '../models/Book.model';
-import BookService from '../services/Book.service';
+import UserModel from '../models/User.model';
+import UserService from '../services/User.service';
 
-export default function BookPage() {
+export default function UserPage() {
   return (
-    <ModelProvider model={BookModel}>
-      <ServiceProvider service={BookService}>
+    <ModelProvider model={UserModel}>
+      <ServiceProvider service={UserService}>
         <RecordPage />
       </ServiceProvider>
     </ModelProvider>

@@ -1,4 +1,4 @@
-import Page from '../components/Page';
+import RecordPage from '../components/RecordPage';
 import { ModelProvider } from '../contexts/ModelContext';
 import { ServiceProvider } from '../contexts/ServiceContext';
 import TagModel from '../models/Tag.model';
@@ -8,7 +8,7 @@ export default function TagPage() {
   return (
     <ModelProvider model={TagModel}>
       <ServiceProvider service={TagService}>
-        <Page />
+        <RecordPage />
       </ServiceProvider>
     </ModelProvider>
   );

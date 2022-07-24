@@ -45,7 +45,7 @@ const BookModel = new Model({
       type: 'asyncTypeahead',
       placeholder: 'Search for a publisher...',
       labelKey: (publisher) => publisher.name,
-      fetchFn: (limit) => PublisherService.find(limit, 'name'),
+      fetchFn: (limit, token) => PublisherService.find(limit, 'name', token),
     },
     {
       label: 'Authors',
@@ -54,7 +54,7 @@ const BookModel = new Model({
       placeholder: 'Search for an author...',
       multiple: true,
       labelKey: (author) => `${author.firstName} ${author.lastName}`,
-      fetchFn: (limit) => AuthorService.find(limit, 'firstName || \' \' || lastName', false, false),
+      fetchFn: (limit, token) => AuthorService.find(limit, 'firstName || \' \' || lastName', token, false, false),
     },
     {
       label: 'Categories',
@@ -63,7 +63,7 @@ const BookModel = new Model({
       placeholder: 'Search for a category...',
       multiple: true,
       labelKey: (category) => category.name,
-      fetchFn: (limit) => CategoryService.find(limit, 'name'),
+      fetchFn: (limit, token) => CategoryService.find(limit, 'name', token),
     },
     {
       label: 'Tags',
@@ -72,7 +72,7 @@ const BookModel = new Model({
       placeholder: 'Search for a tag...',
       multiple: true,
       labelKey: (tag) => tag.name,
-      fetchFn: (limit) => TagService.find(limit, 'name'),
+      fetchFn: (limit, token) => TagService.find(limit, 'name', token),
     },
   ],
   defaultValues: {

@@ -1,4 +1,4 @@
-import Page from '../components/Page';
+import RecordPage from '../components/RecordPage';
 import { ModelProvider } from '../contexts/ModelContext';
 import { ServiceProvider } from '../contexts/ServiceContext';
 import PatronModel from '../models/Patron.model';
@@ -8,7 +8,7 @@ export default function PatronPage() {
   return (
     <ModelProvider model={PatronModel}>
       <ServiceProvider service={PatronService}>
-        <Page />
+        <RecordPage />
       </ServiceProvider>
     </ModelProvider>
   );

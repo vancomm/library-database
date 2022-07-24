@@ -18,7 +18,7 @@ const CopyModel = new Model({
       type: 'asyncTypeahead',
       placeholder: 'Search for a book...',
       labelKey: (book) => book.title,
-      fetchFn: (limit) => BookService.find(limit, 'title'),
+      fetchFn: (limit, token) => BookService.find(limit, 'title', token),
     },
     {
       label: 'Number',

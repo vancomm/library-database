@@ -28,9 +28,11 @@ app.use(cors());
 app.use(express.json());
 
 app.post('/register', async (req, res) => {
-  const { username, password, role } = req.body;
-  if (!username || !password || !role) {
-    res.status(422).json({ message: 'Request body must contain a username, a password and a role.' });
+  const {
+    username, name, password, role,
+  } = req.body;
+  if (!username || !name || !password || !role) {
+    res.status(422).json({ message: 'Request body must contain a username, a name, a password and a role.' });
     return;
   }
   const userExists = await UserModel.findOne({ username });
@@ -40,15 +42,15 @@ app.post('/register', async (req, res) => {
   }
   const hash = await bcrypt.hash(password, 10);
   const user = {
-    username, role, hash,
+    username, name, role, hash,
   };
   await UserModel.insert(user);
-  const token = jwt.sign({ username, role }, process.env.TOKEN_SECRET, { expiresIn: '2h' });
+  const token = jwt.sign({ username }, process.env.TOKEN_SECRET, { expiresIn: '2h' });
   res.status(201).json({ user, token });
 });
 
 app.post('/login', async (req, res) => {
-  const { username, password, role } = req.body;
+  const { username, password } = req.body;
   const user = await UserModel.findOne({ username });
   if (!user) {
     res.status(404).json({ message: 'Username not found.' });
@@ -60,20 +62,27 @@ app.post('/login', async (req, res) => {
     res.status(400).json({ message: 'Incorrect password.' });
     return;
   }
-  const token = jwt.sign({ username, role }, process.env.TOKEN_SECRET, { expiresIn: '2h' });
+  const token = jwt.sign({ username }, process.env.TOKEN_SECRET, { expiresIn: '2h' });
   res.status(200).json({ user, token });
 });
 
+/*
+    TODO: authAdmin middleware
+          check if req.user.role is 'admin'
+          for privileged endpoints
+*/
+
 app.use('/patrons', auth, makeRouter(PatronModel));
-app.use('/authors', makeRouter(AuthorModel));
-app.use('/tags', makeRouter(TagModel));
-app.use('/publishers', makeRouter(PublisherModel));
-app.use('/categories', makeRouter(CategoryModel));
-app.use('/books', makeRouter(BookModel));
-app.use('/bookauthor', makeRouter(BookAuthorModel));
-app.use('/booktag', makeRouter(BookTagModel));
-app.use('/bookcategory', makeRouter(BookCategoryModel));
-app.use('/copy', makeRouter(CopyModel));
+app.use('/authors', auth, makeRouter(AuthorModel));
+app.use('/tags', auth, makeRouter(TagModel));
+app.use('/publishers', auth, makeRouter(PublisherModel));
+app.use('/categories', auth, makeRouter(CategoryModel));
+app.use('/books', auth, makeRouter(BookModel));
+app.use('/bookauthors', auth, makeRouter(BookAuthorModel));
+app.use('/booktags', auth, makeRouter(BookTagModel));
+app.use('/bookcategories', auth, makeRouter(BookCategoryModel));
+app.use('/copies', auth, makeRouter(CopyModel));
+app.use('/users', auth, makeRouter(UserModel));
 
 app.get('*', (req, res) => {
   res.status(418).send({ message: '=)' });

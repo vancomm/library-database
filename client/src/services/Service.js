@@ -5,18 +5,27 @@ export default class Service {
     this.apiRoute = apiRoute;
   }
 
-  async get(params) {
+  async get(params, token) {
     const urlWithParams = `${this.apiRoute}?${new URLSearchParams(params)}`;
-    return fetch(urlWithParams);
+    return fetch(
+      urlWithParams,
+      {
+        headers: {
+          method: 'GET',
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    );
   }
 
-  async getThruPost(params) {
+  async getThruPost(params, token) {
     const res = await fetch(
       `${this.apiRoute}/get`,
       {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(params),
       },
@@ -24,61 +33,88 @@ export default class Service {
     return res.json();
   }
 
-  async getById(id) {
-    return fetch(`${this.apiRoute}/${id}`);
-  }
-
-  find(limit, search, start = true, end = false) {
-    return (query) => this.getThruPost({
-      limit,
-      where: {
-        [search]: `${start ? '' : '%'}${query}${end ? '' : '%'}`,
+  async getById(id, token) {
+    return fetch(
+      `${this.apiRoute}/${id}`,
+      {
+        headers: {
+          method: 'GET',
+          Authorization: `Bearer ${token}`,
+        },
       },
-    });
+    );
   }
 
-  async postOne(record) {
+  find(limit, search, token, start = true, end = false) {
+    return (query) => this.getThruPost(
+      {
+        limit,
+        where: {
+          [search]: `${start ? '' : '%'}${query}${end ? '' : '%'}`,
+        },
+      },
+      token,
+    );
+  }
+
+  async postOne(data, token) {
     return fetch(
       this.apiRoute,
       {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify(record),
+        body: JSON.stringify(data),
       },
     );
   }
 
-  async delete(params) {
+  async delete(params, token) {
     return fetch(this.apiRoute, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify(params),
     });
   }
 
-  async deleteById(id) {
-    return fetch(`${this.apiRoute}/${id}`, { method: 'DELETE' });
+  async deleteById(id, token) {
+    return fetch(
+      `${this.apiRoute}/${id}`,
+      {
+        method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    );
   }
 
-  async updateById(id, data) {
+  async updateById(id, data, token) {
     return fetch(`${this.apiRoute}/${id}`, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       },
       body: JSON.stringify(data),
     });
   }
 
-  async updateOne(record) {
+  async updateOne(record, token) {
     return fetch(this.apiRoute, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       },
       body: JSON.stringify(record),
     });

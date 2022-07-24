@@ -14,7 +14,7 @@ export default function HomePage() {
         gap: '40px',
       }}
       >
-        <Calculator />
+        {/* <Calculator /> */}
         <Clock />
       </div>
     </Container>

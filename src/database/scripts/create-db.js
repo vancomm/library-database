@@ -24,9 +24,9 @@ export default function createDb(dbPath) {
   db.run(`CREATE TABLE book(
   id            INTEGER PRIMARY KEY AUTOINCREMENT,
   publisherId   INTEGER NOT NULL,
-  title         TEXT,
-  publishedDate TEXT,
-  pages         INTEGER,
+  title         TEXT NOT NULL,
+  publishedDate TEXT NOT NULL,
+  pages         INTEGER NOT NULL,
 
   FOREIGN KEY(publisherId) REFERENCES publisher(id)
 )`);
@@ -67,8 +67,8 @@ export default function createDb(dbPath) {
   patronId    INTEGER NOT NULL,
   bookId      INTEGER NOT NULL,
   reviewPts   INTEGER NOT NULL,
-  reviewText  TEXT,
   reviewDate  TEXT NOT NULL,
+  reviewText  TEXT,
   
   FOREIGN KEY (patronId) REFERENCES patron(id)
 )`);
@@ -125,9 +125,13 @@ export default function createDb(dbPath) {
 )`);
 
   db.run(`CREATE TABLE user(
-    id        INTEGER PRIMARY KEY AUTOINCREMENT,
-    username  TEXT NOT NULL,
-    role      TEXT NOT NULL,
-    hash      TEXT NOT NULL
+  id        INTEGER PRIMARY KEY AUTOINCREMENT,
+  username  TEXT NOT NULL,
+  hash      TEXT NOT NULL,
+  name      TEXT NOT NULL,
+  role      TEXT NOT NULL,
+  patronId  INTEGER,
+
+  FOREIGN KEY(patronId) REFERENCES patron(id)
 )`);
 }

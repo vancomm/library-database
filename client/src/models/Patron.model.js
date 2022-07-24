@@ -1,12 +1,13 @@
 import * as yup from 'yup';
 import Model from './Model';
+import phoneRegex from '../data/phone-regex';
 
 const PatronModel = new Model({
   name: 'Patrons',
   schema: yup.object().shape({
     firstName: yup.string().required('Enter a first name'),
     lastName: yup.string().required('Enter a last name'),
-    phone: yup.string().matches(/^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/, 'Enter a valid phone number'),
+    phone: yup.string().matches(phoneRegex, 'Enter a valid phone number'),
     email: yup.string().email('Enter a valid email'),
   }),
   formControls: [

@@ -1,4 +1,4 @@
-import Page from '../components/Page';
+import RecordPage from '../components/RecordPage';
 import { ModelProvider } from '../contexts/ModelContext';
 import { ServiceProvider } from '../contexts/ServiceContext';
 import PublisherModel from '../models/Publisher.model';
@@ -8,7 +8,7 @@ export default function PublisherPage() {
   return (
     <ModelProvider model={PublisherModel}>
       <ServiceProvider service={PublisherService}>
-        <Page />
+        <RecordPage />
       </ServiceProvider>
     </ModelProvider>
   );

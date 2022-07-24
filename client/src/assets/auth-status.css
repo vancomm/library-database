@@ -1,0 +1,7 @@
+.auth-status .auth-status-link {
+  color: var(--bs-link-color);
+}
+
+.auth-status .auth-status-link:hover {
+  color: var(--bs-link-hover-color);
+}
