@@ -19,18 +19,23 @@ export default class Model {
     return select(this.table, params);
   }
 
+  async getById(id) {
+    // const [one] = await select(this.table, { where: { id } });
+    console.log(id);
+    const [one] = await this.get({ where: { id } });
+    return one;
+  }
+
   async findOne(params) {
-    const [one] = await select(this.table, { where: params });
+    // const [one] = await select(this.table, { where: params });
+    const [one] = await this.get({ where: params });
     return one;
   }
 
   async exists(params) {
-    const res = await select(this.table, { where: params });
+    // const res = await select(this.table, { where: params });
+    const res = await this.get({ where: params });
     return res.length > 0;
-  }
-
-  async getById(id) {
-    return select(this.table, { where: { id } });
   }
 
   async insert(data) {

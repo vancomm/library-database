@@ -2,6 +2,7 @@ import query from '../query.js';
 import buildWhere from '../utils/build-where.js';
 
 export default async function select(table, params) {
+  console.log(params);
   const {
     alias, columns, join, limit, offset, where,
   } = params;

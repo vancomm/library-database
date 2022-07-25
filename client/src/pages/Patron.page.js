@@ -1,6 +1,6 @@
-import RecordPage from '../components/RecordPage';
 import { ModelProvider } from '../contexts/ModelContext';
 import { ServiceProvider } from '../contexts/ServiceContext';
+import RecordPage from '../components/RecordPage';
 import PatronModel from '../models/Patron.model';
 import PatronService from '../services/Patron.service';
 

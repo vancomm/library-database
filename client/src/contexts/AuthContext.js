@@ -2,7 +2,6 @@
 import {
   createContext, useContext, useMemo, useState,
 } from 'react';
-// import AuthService from '../providers/authProvider';
 import AuthService from '../services/Auth.service';
 
 const AuthContext = createContext();
@@ -15,6 +14,8 @@ export function AuthProvider({ children }) {
   };
 
   const [user, setUser] = useState(getUser());
+
+  // console.log(getUser());
 
   const saveUser = (userData) => {
     sessionStorage.setItem('user', JSON.stringify(userData));

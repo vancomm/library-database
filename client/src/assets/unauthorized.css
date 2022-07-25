@@ -1,0 +1,12 @@
+.ua-container {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+  height: 80vh;
+}
+
+.ua-alert {
+  width: 300px;
+}

@@ -1,4 +1,5 @@
 import { Routes, Route } from 'react-router-dom';
+import Container from 'react-bootstrap/Container';
 import Navigation from './components/Navigation';
 import TagPage from './pages/Tag.page';
 import BookPage from './pages/Book.page';
@@ -14,11 +15,14 @@ import AuthPage from './pages/Auth.page';
 import RequireAuth from './components/RequireAuth';
 import { AuthProvider } from './contexts/AuthContext';
 import UserPage from './pages/User.page';
+import RequireRole from './components/RequireRole';
 
 export default function App() {
   return (
     <AuthProvider>
+
       <Navigation />
+
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/auth" element={<AuthPage />} />
@@ -34,7 +38,9 @@ export default function App() {
           path="/authors"
           element={(
             <RequireAuth>
-              <AuthorPage />
+              <RequireRole authorizedRoles={['admin']}>
+                <AuthorPage />
+              </RequireRole>
             </RequireAuth>
           )}
         />
@@ -42,7 +48,9 @@ export default function App() {
           path="/books"
           element={(
             <RequireAuth>
-              <BookPage />
+              <RequireRole authorizedRoles={['admin']}>
+                <BookPage />
+              </RequireRole>
             </RequireAuth>
           )}
         />
@@ -50,7 +58,9 @@ export default function App() {
           path="/borrows"
           element={(
             <RequireAuth>
-              <BorrowPage />
+              <RequireRole authorizedRoles={['admin']}>
+                <BorrowPage />
+              </RequireRole>
             </RequireAuth>
           )}
         />
@@ -58,7 +68,9 @@ export default function App() {
           path="/categories"
           element={(
             <RequireAuth>
-              <CategoryPage />
+              <RequireRole authorizedRoles={['admin']}>
+                <CategoryPage />
+              </RequireRole>
             </RequireAuth>
           )}
         />
@@ -66,7 +78,9 @@ export default function App() {
           path="/patrons"
           element={(
             <RequireAuth>
-              <PatronPage />
+              <RequireRole authorizedRoles={['admin']}>
+                <PatronPage />
+              </RequireRole>
             </RequireAuth>
           )}
         />
@@ -74,7 +88,9 @@ export default function App() {
           path="/publishers"
           element={(
             <RequireAuth>
-              <PublisherPage />
+              <RequireRole authorizedRoles={['admin']}>
+                <PublisherPage />
+              </RequireRole>
             </RequireAuth>
           )}
         />
@@ -82,7 +98,9 @@ export default function App() {
           path="/tags"
           element={(
             <RequireAuth>
-              <TagPage />
+              <RequireRole authorizedRoles={['admin']}>
+                <TagPage />
+              </RequireRole>
             </RequireAuth>
           )}
         />
@@ -90,7 +108,9 @@ export default function App() {
           path="/copies"
           element={(
             <RequireAuth>
-              <CopyPage />
+              <RequireRole authorizedRoles={['admin']}>
+                <CopyPage />
+              </RequireRole>
             </RequireAuth>
           )}
         />
@@ -98,11 +118,14 @@ export default function App() {
           path="/users"
           element={(
             <RequireAuth>
-              <UserPage />
+              <RequireRole authorizedRoles={['admin']}>
+                <UserPage />
+              </RequireRole>
             </RequireAuth>
           )}
         />
       </Routes>
+
     </AuthProvider>
   );
 }

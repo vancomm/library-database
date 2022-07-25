@@ -95,16 +95,17 @@ export default class Service {
   }
 
   async updateById(id, data, token) {
-    return fetch(`${this.apiRoute}/${id}`, {
-      method: 'PATCH',
-      headers: {
-        'Content-Type': 'application/json',
+    return fetch(
+      `${this.apiRoute}/${id}`,
+      {
+        method: 'PATCH',
         headers: {
           Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
         },
+        body: JSON.stringify(data),
       },
-      body: JSON.stringify(data),
-    });
+    );
   }
 
   async updateOne(record, token) {

@@ -5,7 +5,8 @@ import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import { createServer } from 'https';
 import { readFileSync } from 'fs';
-import makeRouter from './src/make-router.js';
+import makeRouter from './src/routers/make-router.js';
+import UserRouter from './src/routers/User.router.js';
 import PatronModel from './src/database/models/Patron.model.js';
 import AuthorModel from './src/database/models/Author.model.js';
 import TagModel from './src/database/models/Tag.model.js';
@@ -29,7 +30,7 @@ app.use(express.json());
 
 app.post('/register', async (req, res) => {
   const {
-    username, name, password, role,
+    username, name, password, role, patronId,
   } = req.body;
   if (!username || !name || !password || !role) {
     res.status(422).json({ message: 'Request body must contain a username, a name, a password and a role.' });
@@ -42,10 +43,10 @@ app.post('/register', async (req, res) => {
   }
   const hash = await bcrypt.hash(password, 10);
   const user = {
-    username, name, role, hash,
+    username, name, role, hash, patronId,
   };
   await UserModel.insert(user);
-  const token = jwt.sign({ username }, process.env.TOKEN_SECRET, { expiresIn: '2h' });
+  const token = jwt.sign({ username }, process.env.TOKEN_SECRET);
   res.status(201).json({ user, token });
 });
 
@@ -62,7 +63,7 @@ app.post('/login', async (req, res) => {
     res.status(400).json({ message: 'Incorrect password.' });
     return;
   }
-  const token = jwt.sign({ username }, process.env.TOKEN_SECRET, { expiresIn: '2h' });
+  const token = jwt.sign({ username }, process.env.TOKEN_SECRET);
   res.status(200).json({ user, token });
 });
 
@@ -82,7 +83,7 @@ app.use('/bookauthors', auth, makeRouter(BookAuthorModel));
 app.use('/booktags', auth, makeRouter(BookTagModel));
 app.use('/bookcategories', auth, makeRouter(BookCategoryModel));
 app.use('/copies', auth, makeRouter(CopyModel));
-app.use('/users', auth, makeRouter(UserModel));
+app.use('/users', auth, UserRouter);
 
 app.get('*', (req, res) => {
   res.status(418).send({ message: '=)' });

@@ -1,5 +1,5 @@
 import express from 'express';
-import calcCount from './database/utils/calc-count.js';
+import calcCount from '../database/utils/calc-count.js';
 
 function objToString(obj) {
   return JSON.stringify(obj, null, 2);
@@ -24,7 +24,7 @@ export default function makeRouter(model) {
         return;
       }
     }
-    const records = await model.get(req.query);
+    const records = await model.get({ limit, offset });
     const total = await model.total();
     const count = calcCount(limit, offset, total);
     res.status(200).json({
@@ -34,7 +34,7 @@ export default function makeRouter(model) {
 
   router.get('/:id', async (req, res) => {
     const { id } = req.params;
-    const [record] = await model.getById(id);
+    const record = await model.getById(id);
     if (!record) {
       res.status(404).json({ message: `No record with id ${id}.` });
       return;
@@ -71,7 +71,7 @@ export default function makeRouter(model) {
       const record = req.body;
       console.log(`Received record to insert into table ${model.table}:\n${objToString(record)}`);
       const id = await model.insert(record);
-      res.status(200).json({ id });
+      res.status(201).json({ id });
     } catch (err) {
       res.status(409).json({ message: `Cannot post this entry. ${err}` });
     }

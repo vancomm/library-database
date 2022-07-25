@@ -13,23 +13,27 @@ export default function RecordForm({
   initialValues, submitFn, buttons, direction,
 }) {
   const { token } = useAuth();
-  const { model } = useModel();
+  const { model: { formControls, validationSchema, toData } } = useModel();
 
-  const typeaheadRefs = model.formControls
+  // console.log(validationSchema);
+
+  // console.log(initialValues);
+
+  const typeaheadRefs = formControls
     .reduce((acc, { type, name }) => (type === 'asyncTypeahead' ? { ...acc, [name]: useRef() } : acc), {});
 
-  const onSubmit = async (values, { resetForm }) => {
-    console.log({ values });
-    // const record = model.cleanRecord(values);
-    // console.log(record);
-    // await submitFn(record);
-    // resetForm();
-    // Object.values(typeaheadRefs).forEach((taRef) => { taRef.current.clear(); });
+  const onSubmit = async (record, { resetForm }) => {
+    console.log(record);
+    const data = toData(record);
+    console.log(data);
+    await submitFn(data);
+    resetForm();
+    Object.values(typeaheadRefs).forEach((taRef) => { taRef.current.clear(); });
   };
 
   return (
     <Formik
-      validationSchema={model.schema}
+      validationSchema={validationSchema}
       initialValues={initialValues}
       onSubmit={onSubmit}
     >
@@ -42,7 +46,7 @@ export default function RecordForm({
       }) => (
         <Form noValidate onSubmit={handleSubmit}>
           <Row className="mb-3">
-            {chunks(model.formControls, 4).map((controls, i) => (
+            {chunks(formControls, 4).map((controls, i) => (
               <Stack key={`${controls[0].name}`} as={Row} direction={direction} gap={3} className={i > 0 && 'mt-3'}>
                 {controls.map(({
                   label, name, type, placeholder, ...rest

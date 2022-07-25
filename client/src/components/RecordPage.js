@@ -6,7 +6,7 @@ import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container';
 import CollapsibleButton from './CollapsibleButton';
 import ModalWindow from './ModalWindow';
-import PaginatedTable from './PaginatedTable';
+import RecordTable from './RecordTable';
 import RecordForm from './RecordForm';
 import { useModel } from '../contexts/ModelContext';
 import { useService } from '../contexts/ServiceContext';
@@ -37,6 +37,7 @@ export default function RecordPage() {
     const res = await service.get({ limit, offset }, token);
     if (res.status === 200) {
       const payload = await res.json();
+      // console.log(payload);
       setRecords(payload.records);
       setTotal(payload.total);
     } else {
@@ -48,7 +49,7 @@ export default function RecordPage() {
 
   const handleInsert = async (record) => {
     const res = await service.postOne(record, token);
-    if (res.status === 200) {
+    if (res.status === 201) {
       await fetchRecords();
     } else {
       const { message } = await res.json();
@@ -123,8 +124,10 @@ export default function RecordPage() {
           </CollapsibleButton>
         </Row>
 
-        <PaginatedTable
-          records={records}
+        <RecordTable
+          name={model.name}
+          headers={model.tableHeaders}
+          rows={records.map(model.toRow)}
           onEdit={handleEdit}
           onDelete={handleDelete}
           onLimitSubmit={handleLimitSubmit}
@@ -137,12 +140,12 @@ export default function RecordPage() {
       </Container>
 
       <ModalWindow
-        title={model.recordToTitle(updateModalData)}
+        title={model.toLine(updateModalData)}
         show={showUpdateModal}
         handleClose={handleCloseUpdateModal}
       >
         <RecordForm
-          initialValues={updateModalData}
+          initialValues={{ ...model.defaultValues, ...updateModalData }}
           submitFn={handleUpdate}
           buttons={(
             <div className="float-end">
