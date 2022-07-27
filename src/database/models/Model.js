@@ -32,9 +32,9 @@ export default class Model {
     return one;
   }
 
-  async exists(params) {
+  async exists(where) {
     // const res = await select(this.table, { where: params });
-    const res = await this.get({ where: params });
+    const res = await this.get({ where });
     return res.length > 0;
   }
 

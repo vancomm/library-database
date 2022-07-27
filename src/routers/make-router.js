@@ -34,6 +34,10 @@ export default function makeRouter(model) {
 
   router.get('/:id', async (req, res) => {
     const { id } = req.params;
+    if (!Number.isInteger(id)) {
+      res.status(422).json({ message: 'Id must be an integer' });
+      return;
+    }
     const record = await model.getById(id);
     if (!record) {
       res.status(404).json({ message: `No record with id ${id}.` });

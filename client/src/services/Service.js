@@ -18,6 +18,18 @@ export default class Service {
     );
   }
 
+  async getById(id, token) {
+    return fetch(
+      `${this.apiRoute}/${id}`,
+      {
+        headers: {
+          method: 'GET',
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    );
+  }
+
   async getThruPost(params, token) {
     const res = await fetch(
       `${this.apiRoute}/get`,
@@ -31,18 +43,6 @@ export default class Service {
       },
     );
     return res.json();
-  }
-
-  async getById(id, token) {
-    return fetch(
-      `${this.apiRoute}/${id}`,
-      {
-        headers: {
-          method: 'GET',
-          Authorization: `Bearer ${token}`,
-        },
-      },
-    );
   }
 
   find(limit, search, token, start = true, end = false) {

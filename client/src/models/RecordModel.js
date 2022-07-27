@@ -28,6 +28,8 @@ export default class RecordModel {
 
     const [shape, defaultValues, formControls] = aggregate(formFields);
 
+    this.shape = shape;
+
     this.validationSchema = yup.object().shape(shape);
     this.defaultValues = defaultValues;
     this.formControls = formControls;

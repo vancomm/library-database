@@ -28,6 +28,16 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+app.get('/exists', async (req, res) => {
+  const { username } = req.query;
+  if (!username) {
+    res.status(422).json({ message: 'Username must be specified in query params' });
+    return;
+  }
+  const exists = await UserModel.exists({ username });
+  res.status(200).json({ result: exists });
+});
+
 app.post('/register', async (req, res) => {
   const {
     username, name, password, role, patronId,

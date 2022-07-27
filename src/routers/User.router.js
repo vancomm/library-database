@@ -41,6 +41,10 @@ UserRouter.get('/', async (req, res) => {
 UserRouter.get('/:id', async (req, res) => {
   const { id } = req.params;
   console.log(id);
+  if (!Number.isInteger(id)) {
+    res.status(422).json({ message: 'Id must be an integer' });
+    return;
+  }
   const record = await UserModel.getById(id);
   if (!record) {
     res.status(404).json({ message: `No record with id ${id}.` });

@@ -1,7 +1,7 @@
 import * as yup from 'yup';
+import RecordModel from './RecordModel';
 import PatronService from '../services/Patron.service';
 import PatronModel from './Patron.model';
-import RecordModel from './RecordModel';
 
 const modelName = 'Users';
 

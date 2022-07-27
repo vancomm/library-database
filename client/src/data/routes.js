@@ -23,3 +23,5 @@ export const loginRoute = 'https://localhost:3001/login';
 export const registerRoute = 'https://localhost:3001/register';
 
 export const usersRoute = 'https://localhost:3001/users';
+
+export const existsRoute = 'https://localhost:3001/exists';

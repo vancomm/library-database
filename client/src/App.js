@@ -16,6 +16,7 @@ import RequireAuth from './components/RequireAuth';
 import { AuthProvider } from './contexts/AuthContext';
 import UserPage from './pages/User.page';
 import RequireRole from './components/RequireRole';
+import { AuthModeProvider } from './contexts/AuthModeContext';
 
 export default function App() {
   return (
@@ -25,7 +26,14 @@ export default function App() {
 
       <Routes>
         <Route path="/" element={<HomePage />} />
-        <Route path="/auth" element={<AuthPage />} />
+        <Route
+          path="/auth"
+          element={(
+            <AuthModeProvider>
+              <AuthPage />
+            </AuthModeProvider>
+          )}
+        />
         <Route
           path="/dashboard"
           element={(
