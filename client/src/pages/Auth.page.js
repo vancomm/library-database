@@ -1,5 +1,3 @@
-/* eslint-disable no-unreachable */
-/* eslint-disable max-len */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 import { useState } from 'react';
@@ -67,14 +65,13 @@ const signupInitialValues = {
 
 export default function AuthPage() {
   const { isLogin } = useAuthMode();
-
-  const [showAlert, setShowAlert] = useState(false);
-  const [alertMessage, setAlertMessage] = useState('');
+  const { tryLogin, tryRegister } = useAuth();
 
   const navigate = useNavigate();
   const location = useLocation();
 
-  const { tryLogin, tryRegister } = useAuth();
+  const [showAlert, setShowAlert] = useState(false);
+  const [alertMessage, setAlertMessage] = useState('');
 
   const from = location.state?.from?.pathname || '/';
 
@@ -270,192 +267,4 @@ export default function AuthPage() {
       )}
     </Formik>
   );
-
-  // if (authMode === 'signin') {
-  //   return (
-  //     <Formik
-  //       validationSchema={yup.object().shape({
-  //         username: UserModel.shape.username,
-  //         password: UserModel.shape.password,
-  //       })}
-  //       initialValues={{
-  //         username: UserModel.defaultValues.username,
-  //         password: UserModel.defaultValues.password,
-  //       }}
-  //       onSubmit={onSubmit}
-  //     >
-  //       {({
-  //         values,
-  //         errors,
-  //         touched,
-  //         handleChange,
-  //         handleSubmit,
-  //       }) => (
-  //         <div className="auth-form-container">
-  //           <Form
-  //             noValidate
-  //             className="auth-form"
-  //             onSubmit={handleSubmit}
-  //           >
-  //             <div className="auth-form-content">
-  //               <h3 className="auth-form-title">Sign in</h3>
-
-  //               <div className="text-center">
-  //                 Not registered yet?
-  //                 {' '}
-  //                 <span
-  //                   className="link-primary"
-  //                   onClick={() => {
-  //                     // setAuthMode('signup');
-  //                     // resetForm();
-  //                   }}
-  //                 >
-  //                   Sign up
-  //                 </span>
-  //               </div>
-
-  //               <Form.Group className="form-group mt-3">
-  //                 <Form.Label>Username</Form.Label>
-  //                 <Form.Control
-  //                   type="text"
-  //                   name="username"
-  //                   className="mt-1"
-  //                   placeholder="Enter username"
-  //                   value={values.username}
-  //                   onChange={handleChange}
-  //                   isInvalid={touched.username && !!errors.username}
-  //                 />
-  //                 <Form.Control.Feedback type="invalid">{errors.username}</Form.Control.Feedback>
-  //               </Form.Group>
-
-  //               <Form.Group className="form-group mt-3">
-  //                 <Form.Label>Password</Form.Label>
-  //                 <Form.Control
-  //                   type="password"
-  //                   name="password"
-  //                   className="mt-1"
-  //                   placeholder="Enter password"
-  //                   value={values.password}
-  //                   onChange={handleChange}
-  //                   isInvalid={touched.password && !!errors.password}
-  //                 />
-  //                 <Form.Control.Feedback type="invalid">{errors.password}</Form.Control.Feedback>
-  //               </Form.Group>
-
-  //               {showAlert && <Alert variant="danger" className="mt-3" onClose={() => setShowAlert(false)} dismissible>{alertMessage}</Alert>}
-
-  //               <div className="d-grid gap-2 mt-3">
-  //                 <Button type="submit">Login</Button>
-  //               </div>
-
-  //             </div>
-  //           </Form>
-  //         </div>
-  //       )}
-  //     </Formik>
-  //   );
-  // }
-
-  // return (
-  //   <>
-  //     <Formik
-  //       validationSchema={UserModel.validationSchema}
-  //       initialValues={UserModel.defaultValues}
-  //       onSubmit={onSubmit}
-  //     >
-  //       {({
-  //         values,
-  //         errors,
-  //         touched,
-  //         handleChange,
-  //         handleSubmit,
-  //       }) => (
-  //         <div className="auth-form-container">
-  //           <Form
-  //             noValidate
-  //             className="auth-form"
-  //             onSubmit={handleSubmit}
-  //           >
-  //             <div className="auth-form-content">
-  //               <h3 className="auth-form-title">Sign Up</h3>
-
-  //               <div className="text-center">
-  //                 Already registered?
-  //                 {' '}
-  //                 <span
-  //                   className="link-primary"
-  //                   onClick={() => {
-  //                     // const { resetForm } = useFormikContext();
-  //                     // setAuthMode('signin');
-  //                     // resetForm();
-  //                   }}
-  //                 >
-  //                   Sign in
-
-  //                 </span>
-  //               </div>
-
-  //               <Form.Group className="form-group mt-3">
-  //                 <Form.Label>Username</Form.Label>
-  //                 <Form.Control
-  //                   type="text"
-  //                   name="username"
-  //                   className="mt-1"
-  //                   placeholder="Enter username"
-  //                   value={values.username}
-  //                   onChange={handleChange}
-  //                   isInvalid={touched.username && !!errors.username}
-  //                 />
-  //                 <Form.Control.Feedback type="invalid">{errors.username}</Form.Control.Feedback>
-  //               </Form.Group>
-
-  //               <Form.Group className="form-group mt-3">
-  //                 <Form.Label>Name</Form.Label>
-  //                 <Form.Control
-  //                   type="text"
-  //                   name="name"
-  //                   className="mt-1"
-  //                   placeholder="Enter name"
-  //                   value={values.name}
-  //                   onChange={handleChange}
-  //                   isInvalid={touched.name && !!errors.name}
-  //                 />
-  //                 <Form.Control.Feedback type="invalid">{errors.name}</Form.Control.Feedback>
-  //               </Form.Group>
-
-  //               <Form.Group className="form-group mt-3">
-  //                 <Form.Label>Password</Form.Label>
-  //                 <Form.Control
-  //                   type="password"
-  //                   name="password"
-  //                   className="mt-1"
-  //                   placeholder="Enter password"
-  //                   value={values.password}
-  //                   onChange={handleChange}
-  //                   isInvalid={touched.password && !!errors.password}
-  //                 />
-  //                 <Form.Control.Feedback type="invalid">{errors.password}</Form.Control.Feedback>
-  //               </Form.Group>
-
-  //               {showAlert && <Alert variant="danger" className="mt-3" onClose={() => setShowAlert(false)} dismissible>{alertMessage}</Alert>}
-
-  //               <div className="d-grid gap-2 mt-3">
-  //                 <Button type="submit">Sign up</Button>
-  //               </div>
-
-  //             </div>
-  //           </Form>
-  //         </div>
-  //       )}
-  //     </Formik>
-
-  //     <ModalWindow
-  //       title="Error"
-  //       show={showAlert}
-  //       handleClose={() => setShowAlert(false)}
-  //     >
-  //       {alertMessage}
-  //     </ModalWindow>
-  //   </>
-  // );
 }

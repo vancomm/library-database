@@ -14,8 +14,8 @@ import { useAuth } from '../contexts/AuthContext';
 
 export default function RecordPage() {
   const { token } = useAuth();
-  const { model } = useModel();
-  const { service } = useService();
+  const model = useModel();
+  const service = useService();
 
   const [records, setRecords] = useState([]);
 
@@ -27,10 +27,14 @@ export default function RecordPage() {
   const [updateModalData, setUpdateModalData] = useState({});
 
   const [showErrorModal, setShowErrorModal] = useState(false);
-  const [errorText, setErrorText] = useState('');
+  const [errorModalText, setErrorModalText] = useState('');
 
   const setPage = (pageNum) => async () => {
     setOffset(limit * (pageNum - 1));
+  };
+
+  const handleCloseUpdateModal = () => {
+    setShowUpdateModal(false);
   };
 
   const fetchRecords = async () => {
@@ -42,21 +46,38 @@ export default function RecordPage() {
       setTotal(payload.total);
     } else {
       const { message } = await res.json();
-      setErrorText(message);
+      setErrorModalText(message);
       setShowErrorModal(true);
     }
   };
 
-  const handleInsert = async (record) => {
-    const res = await service.postOne(record, token);
+  const postWrapper = async (prev) => {
+    if (!prev.success) return prev;
+    const res = await service.postOne(prev.record, token);
     if (res.status === 201) {
       await fetchRecords();
-    } else {
-      const { message } = await res.json();
-      setErrorText(message);
-      setShowErrorModal(true);
+      return { success: true };
     }
+    const { message } = await res.json();
+    return { success: false, message };
   };
+
+  const updateWrapper = async (prev) => {
+    if (!prev.success) return prev;
+    const { id, ...data } = prev.record;
+    const res = await service.updateById(id, data, token);
+    if (res.status === 200) {
+      await fetchRecords();
+      handleCloseUpdateModal();
+      return { success: true };
+    }
+    const { message } = await res.json();
+    return { success: false, message };
+  };
+
+  const handleInsert = async (values) => model.beforeInsert(values).then(postWrapper);
+
+  const handleUpdate = async (values) => model.beforeUpdate(values).then(updateWrapper);
 
   const handleEdit = (id) => (e) => {
     e.target.blur();
@@ -72,7 +93,7 @@ export default function RecordPage() {
       await fetchRecords();
     } else {
       const { message } = await res.json();
-      setErrorText(message);
+      setErrorModalText(message);
       setShowErrorModal(true);
     }
   };
@@ -83,24 +104,6 @@ export default function RecordPage() {
       setOffset(input * (Math.ceil(total / input - 1)));
     }
     setLimit(input);
-  };
-
-  const handleCloseUpdateModal = () => {
-    setShowUpdateModal(false);
-  };
-
-  const handleUpdate = async (record) => {
-    const { id, ...data } = record;
-    const res = await service.updateById(id, data, token);
-    if (res.status === 200) {
-      await fetchRecords();
-      handleCloseUpdateModal();
-    } else {
-      const { message } = await res.json();
-      setErrorText(message);
-      handleCloseUpdateModal();
-      setShowErrorModal(true);
-    }
   };
 
   useEffect(() => {
@@ -162,7 +165,7 @@ export default function RecordPage() {
         show={showErrorModal}
         handleClose={() => setShowErrorModal(false)}
       >
-        <span>{errorText}</span>
+        <span>{errorModalText}</span>
       </ModalWindow>
 
     </>

@@ -2,7 +2,8 @@ node_modules
 old
 *.db
 *.rest
-script.js
 *.pem
+*.nnb
 .env
+script.js
 tasks.md

@@ -20,9 +20,23 @@ const defaultToRow = ({ id, ...rest }) => [id, ...Object.values(rest)];
 
 const defaultToLine = (record) => record.name;
 
+async function defaultBeforeInsert(record) {
+  return new Promise((resolve, reject) => {
+    resolve({ success: true, record: this.toData(record) });
+  });
+}
+
+async function defaultBeforeUpdate(record) {
+  return new Promise((resolve, reject) => {
+    resolve({ success: true, record: this.toData(record) });
+  });
+}
+
 export default class RecordModel {
   constructor({
-    name, formFields, tableHeaders, toData, toRow, toLine,
+    name, formFields, tableHeaders,
+    toData, toRow, toLine,
+    beforeUpdate, beforeInsert,
   }) {
     this.name = name;
 
@@ -40,5 +54,9 @@ export default class RecordModel {
     this.toRow = toRow || defaultToRow;
 
     this.toLine = toLine ?? defaultToLine;
+
+    this.beforeInsert = beforeInsert ?? defaultBeforeInsert;
+
+    this.beforeUpdate = beforeUpdate ?? defaultBeforeUpdate;
   }
 }

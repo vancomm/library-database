@@ -11,7 +11,7 @@ export default function PaginatedTable({
   onEdit, onDelete, onLimitSubmit, onPageClick,
   limit, offset, total,
 }) {
-  const { model } = useModel();
+  const model = useModel();
 
   const rows = records.length > 0
     ? model.recordsToTable(records).map(({ id, data }, i) => (

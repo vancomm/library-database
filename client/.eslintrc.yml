@@ -13,6 +13,9 @@ root: true
 plugins:
   - react
 rules: 
+  no-multiple-empty-lines: 1
+  no-trailing-spaces: 1
+  semi: 1
   no-console: 0
   no-unused-vars: 0
   react/prop-types: 0

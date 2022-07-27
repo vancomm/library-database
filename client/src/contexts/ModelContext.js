@@ -1,11 +1,10 @@
-import { createContext, useContext, useMemo } from 'react';
+import { createContext, useContext } from 'react';
 
 const ModelContext = createContext();
 
 export function ModelProvider({ model, children }) {
-  const value = useMemo(() => ({ model }), []);
   return (
-    <ModelContext.Provider value={value}>
+    <ModelContext.Provider value={model}>
       {children}
     </ModelContext.Provider>
   );

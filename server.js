@@ -7,6 +7,7 @@ import { createServer } from 'https';
 import { readFileSync } from 'fs';
 import makeRouter from './src/routers/make-router.js';
 import UserRouter from './src/routers/User.router.js';
+import BorrowModel from './src/database/models/Borrow.model.js';
 import PatronModel from './src/database/models/Patron.model.js';
 import AuthorModel from './src/database/models/Author.model.js';
 import TagModel from './src/database/models/Tag.model.js';
@@ -83,6 +84,8 @@ app.post('/login', async (req, res) => {
           for privileged endpoints
 */
 
+app.use('/users', auth, UserRouter);
+app.use('/borrows', auth, makeRouter(BorrowModel));
 app.use('/patrons', auth, makeRouter(PatronModel));
 app.use('/authors', auth, makeRouter(AuthorModel));
 app.use('/tags', auth, makeRouter(TagModel));
@@ -93,7 +96,6 @@ app.use('/bookauthors', auth, makeRouter(BookAuthorModel));
 app.use('/booktags', auth, makeRouter(BookTagModel));
 app.use('/bookcategories', auth, makeRouter(BookCategoryModel));
 app.use('/copies', auth, makeRouter(CopyModel));
-app.use('/users', auth, UserRouter);
 
 app.get('*', (req, res) => {
   res.status(418).send({ message: '=)' });

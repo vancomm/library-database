@@ -1,34 +1,38 @@
-import { useRef } from 'react';
-import Form from 'react-bootstrap/Form';
-import Stack from 'react-bootstrap/Stack';
+import { useRef, useState } from 'react';
+import { Formik } from 'formik';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import { Formik } from 'formik';
+import Form from 'react-bootstrap/Form';
+import Stack from 'react-bootstrap/Stack';
+import Alert from 'react-bootstrap/Alert';
 import AsyncSelect from './AsyncSelect';
+import { useAuth } from '../contexts/AuthContext';
 import { useModel } from '../contexts/ModelContext';
 import chunks from '../utils/chunks';
-import { useAuth } from '../contexts/AuthContext';
 
 export default function RecordForm({
   initialValues, submitFn, buttons, direction,
 }) {
   const { token } = useAuth();
-  const { model: { formControls, validationSchema, toData } } = useModel();
+  const { formControls, validationSchema, toData } = useModel();
 
-  // console.log(validationSchema);
-
-  // console.log(initialValues);
+  const [showAlert, setShowAlert] = useState(false);
+  const [alertMessage, setAlertMessage] = useState('');
 
   const typeaheadRefs = formControls
     .reduce((acc, { type, name }) => (type === 'asyncTypeahead' ? { ...acc, [name]: useRef() } : acc), {});
 
-  const onSubmit = async (record, { resetForm }) => {
-    console.log(record);
-    const data = toData(record);
-    console.log(data);
-    await submitFn(data);
-    resetForm();
-    Object.values(typeaheadRefs).forEach((taRef) => { taRef.current.clear(); });
+  const onSubmit = async (values, { resetForm }) => {
+    setShowAlert(false);
+    const res = await submitFn(values);
+    console.log(res);
+    if (!res.success) {
+      setAlertMessage(res.message);
+      setShowAlert(true);
+    } else {
+      resetForm();
+      Object.values(typeaheadRefs).forEach((taRef) => { taRef.current.clear(); });
+    }
   };
 
   return (
@@ -126,6 +130,9 @@ export default function RecordForm({
               </Stack>
             ))}
           </Row>
+
+          {showAlert && <Alert variant="danger" className="mt-3" onClose={() => setShowAlert(false)} dismissible>{alertMessage}</Alert>}
+
           <Row className="float-end" xs="auto">
             {buttons}
           </Row>
