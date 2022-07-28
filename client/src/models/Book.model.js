@@ -3,6 +3,7 @@ import AuthorService from '../services/Author.service';
 import CategoryService from '../services/Category.service';
 import PublisherService from '../services/Publisher.service';
 import TagService from '../services/Tag.service';
+import wildcard from '../utils/wildcard';
 import AuthorModel from './Author.model';
 import CategoryModel from './Category.model';
 import PublisherModel from './Publisher.model';
@@ -41,7 +42,7 @@ const formFields = [
     validation: yup.array().of(yup.object()).length(1, 'Select a publisher'),
     defaultValue: [],
     labelKey: PublisherModel.toLine,
-    fetchFn: (limit, token) => PublisherService.find(limit, 'name', token),
+    fetchFn: (limit, token) => (query) => PublisherService.findString(wildcard(query), 'name', token, limit),
   },
   {
     label: 'Authors',
@@ -52,7 +53,7 @@ const formFields = [
     validation: yup.array().of(yup.object()).min(1, 'Select one or more authors'),
     defaultValue: [],
     labelKey: AuthorModel.toLine,
-    fetchFn: (limit, token) => AuthorService.find(limit, 'firstName || \' \' || lastName', token, false, false),
+    fetchFn: (limit, token) => (query) => AuthorService.findString(wildcard(query, true, true), 'firstName || \' \' || lastName', token, limit),
   },
   {
     label: 'Categories',
@@ -63,7 +64,7 @@ const formFields = [
     validation: yup.array().of(yup.object()),
     defaultValue: [],
     labelKey: CategoryModel.toLine,
-    fetchFn: (limit, token) => CategoryService.find(limit, 'name', token),
+    fetchFn: (limit, token) => (query) => CategoryService.findString(wildcard(query), 'name', token, limit),
   },
   {
     label: 'Tags',
@@ -74,7 +75,7 @@ const formFields = [
     validation: yup.array().of(yup.object()),
     defaultValue: [],
     labelKey: TagModel.toLine,
-    fetchFn: (limit, token) => TagService.find(limit, 'name', token),
+    fetchFn: (limit, token) => (query) => TagService.findString(wildcard(query), 'name', token, limit),
   },
 ];
 

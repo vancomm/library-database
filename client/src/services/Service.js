@@ -31,6 +31,7 @@ export default class Service {
   }
 
   async getThruPost(params, token) {
+    console.log(params);
     const res = await fetch(
       `${this.apiRoute}/get`,
       {
@@ -55,6 +56,15 @@ export default class Service {
       },
       token,
     );
+  }
+
+  async findString(str, search, token, limit) {
+    return this.getThruPost({
+      where: {
+        [search]: str,
+      },
+      limit,
+    }, token);
   }
 
   async postOne(data, token) {

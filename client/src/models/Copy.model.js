@@ -2,6 +2,7 @@ import * as yup from 'yup';
 import BookModel from './Book.model';
 import BookService from '../services/Book.service';
 import RecordModel from './RecordModel';
+import wildcard from '../utils/wildcard';
 
 const name = 'Copies';
 
@@ -14,7 +15,8 @@ const formFields = [
     validation: yup.array().of(yup.object()).min(1, 'Select a book'),
     defaultValue: [],
     labelKey: (book) => book.title,
-    fetchFn: (limit, token) => BookService.find(limit, 'title', token),
+    // fetchFn: (limit, token) => BookService.find(limit, 'title', token),
+    fetchFn: (limit, token) => (query) => BookService.findString(wildcard(query), 'title', token, limit),
   },
   {
     label: 'Number',

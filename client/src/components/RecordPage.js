@@ -1,6 +1,4 @@
-import {
-  useState, useEffect,
-} from 'react';
+import { useState, useEffect } from 'react';
 import Row from 'react-bootstrap/Row';
 import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container';
@@ -8,9 +6,9 @@ import CollapsibleButton from './CollapsibleButton';
 import ModalWindow from './ModalWindow';
 import RecordTable from './RecordTable';
 import RecordForm from './RecordForm';
+import { useAuth } from '../contexts/AuthContext';
 import { useModel } from '../contexts/ModelContext';
 import { useService } from '../contexts/ServiceContext';
-import { useAuth } from '../contexts/AuthContext';
 
 export default function RecordPage() {
   const { token } = useAuth();
@@ -52,6 +50,7 @@ export default function RecordPage() {
   };
 
   const postWrapper = async (prev) => {
+    console.log(prev);
     if (!prev.success) return prev;
     const res = await service.postOne(prev.record, token);
     if (res.status === 201) {
@@ -75,9 +74,9 @@ export default function RecordPage() {
     return { success: false, message };
   };
 
-  const handleInsert = async (values) => model.beforeInsert(values).then(postWrapper);
+  const handleInsert = async (values) => model.beforeInsert(values, { token }).then(postWrapper);
 
-  const handleUpdate = async (values) => model.beforeUpdate(values).then(updateWrapper);
+  const handleUpdate = async (values) => model.beforeUpdate(values, { token }).then(updateWrapper);
 
   const handleEdit = (id) => (e) => {
     e.target.blur();

@@ -4,8 +4,9 @@ import BookModel from './Book.model';
 import PatronModel from './Patron.model';
 import BookService from '../services/Book.service';
 import PatronService from '../services/Patron.service';
-import CopyService from '../services/Copy.service';
 import addDays from '../utils/add-days';
+import wildcard from '../utils/wildcard';
+import dateToString from '../utils/date-to-string';
 
 const name = 'Borrows';
 
@@ -17,7 +18,12 @@ const formFields = [
     placeholder: 'Search for a patron',
     validation: yup.array().of(yup.object()).length(1, 'Select a patron'),
     defaultValue: [],
-    fetchFn: (limit, token) => PatronService.find(limit, 'firstName || \' \' || lastName', token, false, false),
+    fetchFn: (limit, token) => (query) => PatronService.findString(
+      wildcard(query, true, true),
+      'firstName || \' \' || lastName',
+      token,
+      limit,
+    ),
     labelKey: PatronModel.toLine,
   },
   {
@@ -27,7 +33,7 @@ const formFields = [
     placeholder: 'Search for a book...',
     validation: yup.array().of(yup.object()).min(1, 'Select a book'),
     defaultValue: [],
-    fetchFn: (limit, token) => BookService.find(limit, 'title', token),
+    fetchFn: (limit, token) => (query) => BookService.findString(wildcard(query), 'title', token, limit),
     labelKey: (book) => book.title,
   },
   {
@@ -35,6 +41,7 @@ const formFields = [
     name: 'borrowDate',
     type: 'date',
     placeholder: '',
+    defaultValue: (new Date()).toISOString().split('T')[0],
     validation: yup.date().required('Enter date of borrow'),
   },
   {
@@ -42,22 +49,40 @@ const formFields = [
     name: 'borrowPeriod',
     type: 'number',
     placeholder: 'Enter borrow period',
+    defaultValue: 14,
     validation: yup.number().integer('This value must be integer').required('Enter borrow period'),
   },
 ];
 
-const beforeInsert = async (values) => {
+const beforeInsert = async (values, { token }) => {
   const {
     patron, book, borrowDate, borrowPeriod,
   } = values;
-  const copy = await CopyService.find();
+  console.log(values);
+  const res = await BookService.getAvailableCopy(book[0].id, token);
+  if (res.status !== 200) {
+    const { message } = await res.json();
+    return { success: false, message };
+  }
+
+  const { id: copyId } = await res.json();
+
+  return {
+    success: true,
+    record: {
+      patronId: patron[0].id,
+      copyId,
+      borrowDate,
+      dueDate: dateToString(addDays(borrowDate, borrowPeriod)),
+    },
+  };
 };
 
-const beforeUpdate = async (values) => {
+const beforeUpdate = async (values, ctx) => {
 
 };
 
-const tableHeaders = ['Book', 'Patron', 'Date', 'Due date'];
+const tableHeaders = ['Book', 'Patron', 'Date', 'Due date', 'Return date'];
 
 const toData = ({
   id, copy, patron, borrowDate, borrowPeriod,
@@ -70,24 +95,29 @@ const toData = ({
 });
 
 const toRow = ({
-  id, book, patron, borrowDate, dueDate,
+  id, book, patron, borrowDate, dueDate, returnDate,
 }) => ([
   id,
   BookModel.toLine(book[0]),
   PatronModel.toLine(patron[0]),
   borrowDate,
   dueDate,
+  returnDate,
 ]);
 
-// const toLine = ({ book }) => BookModel.toLine(book[0]);
 const toLine = (borrow) => {
-  // console.log(borrow);
   if (borrow?.book) return BookModel.toLine(borrow.book[0]);
   return '';
 };
 
 const BorrowModel = new RecordModel({
-  name, formFields, tableHeaders, toData, toRow, toLine,
+  name,
+  formFields,
+  tableHeaders,
+  toData,
+  toRow,
+  toLine,
+  beforeInsert,
 });
 
 export default BorrowModel;

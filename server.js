@@ -13,13 +13,13 @@ import AuthorModel from './src/database/models/Author.model.js';
 import TagModel from './src/database/models/Tag.model.js';
 import PublisherModel from './src/database/models/Publisher.model.js';
 import CategoryModel from './src/database/models/Category.model.js';
-import BookModel from './src/database/models/Book.model.js';
 import BookAuthorModel from './src/database/models/BookAuthor.model.js';
 import BookTagModel from './src/database/models/BookTag.model.js';
 import BookCategoryModel from './src/database/models/BookCategory.model.js';
 import CopyModel from './src/database/models/Copy.model.js';
 import UserModel from './src/database/models/User.model.js';
 import auth from './src/middleware/auth.js';
+import BookRouter from './src/routers/Book.router.js';
 
 dotenv.config();
 const port = process.env.PORT || 3000;
@@ -85,13 +85,13 @@ app.post('/login', async (req, res) => {
 */
 
 app.use('/users', auth, UserRouter);
+app.use('/books', auth, BookRouter);
 app.use('/borrows', auth, makeRouter(BorrowModel));
 app.use('/patrons', auth, makeRouter(PatronModel));
 app.use('/authors', auth, makeRouter(AuthorModel));
 app.use('/tags', auth, makeRouter(TagModel));
 app.use('/publishers', auth, makeRouter(PublisherModel));
 app.use('/categories', auth, makeRouter(CategoryModel));
-app.use('/books', auth, makeRouter(BookModel));
 app.use('/bookauthors', auth, makeRouter(BookAuthorModel));
 app.use('/booktags', auth, makeRouter(BookTagModel));
 app.use('/bookcategories', auth, makeRouter(BookCategoryModel));

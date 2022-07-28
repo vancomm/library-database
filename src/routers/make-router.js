@@ -1,5 +1,4 @@
 import express from 'express';
-import calcCount from '../database/utils/calc-count.js';
 
 function objToString(obj) {
   return JSON.stringify(obj, null, 2);
@@ -26,16 +25,15 @@ export default function makeRouter(model) {
     }
     const records = await model.get({ limit, offset });
     const total = await model.total();
-    const count = calcCount(limit, offset, total);
     res.status(200).json({
-      limit, offset, count, total, records,
+      limit, offset, count: records.length, total, records,
     });
   });
 
   router.get('/:id', async (req, res) => {
     const { id } = req.params;
     if (!Number.isInteger(id)) {
-      res.status(422).json({ message: 'Id must be an integer' });
+      res.status(422).json({ message: 'Id must be an integer', id });
       return;
     }
     const record = await model.getById(id);
@@ -64,9 +62,8 @@ export default function makeRouter(model) {
     }
     const records = await model.get(req.body);
     const total = await model.total();
-    const count = calcCount(limit, offset, total);
     res.status(200).json({
-      limit, offset, count, total, records,
+      limit, offset, count: records.length, total, records,
     });
   });
 

@@ -7,7 +7,6 @@ import BorrowService from '../services/Borrow.service';
 
 export default function BorrowPage() {
   const { token } = useAuth();
-  console.log(token);
   return (
     <ModelProvider model={BorrowModel}>
       <ServiceProvider service={BorrowService}>

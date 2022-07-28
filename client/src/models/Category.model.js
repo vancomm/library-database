@@ -1,5 +1,6 @@
 import * as yup from 'yup';
 import CategoryService from '../services/Category.service';
+import wildcard from '../utils/wildcard';
 import RecordModel from './RecordModel';
 
 const modelName = 'Categories';
@@ -20,7 +21,8 @@ const formFields = [
     validation: yup.array().of(yup.object()),
     defaultValue: [],
     labelKey: (category) => category.name,
-    fetchFn: (limit, token) => CategoryService.find(limit, 'name', token),
+    // fetchFn: (limit, token) => CategoryService.find(limit, 'name', token),
+    fetchFn: (limit, token) => (query) => CategoryService.findString(wildcard(query), 'name', token, limit),
   },
 ];
 

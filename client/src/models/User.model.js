@@ -2,6 +2,7 @@ import * as yup from 'yup';
 import RecordModel from './RecordModel';
 import PatronService from '../services/Patron.service';
 import PatronModel from './Patron.model';
+import wildcard from '../utils/wildcard';
 
 const modelName = 'Users';
 
@@ -54,7 +55,7 @@ const formFields = [
     }),
     defaultValue: [],
     labelKey: PatronModel.toLine,
-    fetchFn: (limit, token) => PatronService.find(limit, 'firstName || \' \' || lastName', token, false, false),
+    fetchFn: (limit, token) => (query) => PatronService.findString(wildcard(query, true, true), 'firstName || \' \' || lastName', token, limit),
   },
 ];
 

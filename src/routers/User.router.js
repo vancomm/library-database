@@ -1,7 +1,6 @@
 import express from 'express';
 import bcrypt from 'bcrypt';
 import UserModel from '../database/models/User.model.js';
-import calcCount from '../database/utils/calc-count.js';
 
 function stripHash(user) {
   const { hash, ...data } = user;
@@ -32,9 +31,8 @@ UserRouter.get('/', async (req, res) => {
   }
   const records = await UserModel.get(req.query).then((users) => users.map(stripHash));
   const total = await UserModel.total();
-  const count = calcCount(limit, offset, total);
   res.status(200).json({
-    limit, offset, count, total, records,
+    limit, offset, count: records.length, total, records,
   });
 });
 
@@ -71,9 +69,8 @@ UserRouter.post('/get', async (req, res) => {
   }
   const records = await UserModel.get(req.body).then((users) => users.map(stripHash));
   const total = await UserModel.total();
-  const count = calcCount(limit, offset, total);
   res.status(200).json({
-    limit, offset, count, total, records,
+    limit, offset, count: records.length, total, records,
   });
 });
 

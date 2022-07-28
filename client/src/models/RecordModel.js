@@ -20,13 +20,13 @@ const defaultToRow = ({ id, ...rest }) => [id, ...Object.values(rest)];
 
 const defaultToLine = (record) => record.name;
 
-async function defaultBeforeInsert(record) {
+async function defaultBeforeInsert(record, ctx) {
   return new Promise((resolve, reject) => {
     resolve({ success: true, record: this.toData(record) });
   });
 }
 
-async function defaultBeforeUpdate(record) {
+async function defaultBeforeUpdate(record, ctx) {
   return new Promise((resolve, reject) => {
     resolve({ success: true, record: this.toData(record) });
   });
