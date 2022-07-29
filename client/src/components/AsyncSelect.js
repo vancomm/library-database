@@ -8,7 +8,7 @@ export default function AsyncSelect({
   name, label, labelKey, fetchFn, placeholder, refProp, initialValue, multiple,
 }) {
   const [field, meta, helper] = useField({
-    name, label, type: 'text', multiple,
+    name, label, type: 'text',
   });
   const [isLoading, setIsLoading] = useState(false);
   const [options, setOptions] = useState([]);

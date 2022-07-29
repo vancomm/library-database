@@ -1,4 +1,6 @@
-import { existsRoute, loginRoute, registerRoute } from '../data/routes';
+import {
+  existsRoute, loginRoute, registerRoute, updateRoute,
+} from '../data/routes';
 
 const AuthService = {
   async exists(username) {
@@ -37,6 +39,23 @@ const AuthService = {
     }
     const { user, token } = await res.json();
     return { success: true, user, token };
+  },
+
+  async update(token) {
+    try {
+      const res = await fetch(
+        updateRoute,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+      const { user } = await res.json();
+      return { success: true, user };
+    } catch (err) {
+      return { success: false, message: err.message };
+    }
   },
 };
 

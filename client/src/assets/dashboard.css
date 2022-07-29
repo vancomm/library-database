@@ -1,0 +1,20 @@
+.dashboard-container .user-details {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.dashboard-container .user-details .user-name {
+  font-size: 1.5rem;
+}
+
+.dashboard-container .user-details .user-role {
+  color: #777;
+  background-color: #eee;
+  padding: 4px 7px;
+  border-radius: 5px;
+}
+
+.dashboard-container .user-form-container {
+  width: 300px;
+}

@@ -14,7 +14,7 @@ export default function RecordForm({
   initialValues, submitFn, buttons, direction,
 }) {
   const { token } = useAuth();
-  const { formControls, validationSchema, toData } = useModel();
+  const { formControls, validationSchema } = useModel();
 
   const [showAlert, setShowAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState('');
@@ -51,7 +51,7 @@ export default function RecordForm({
         <Form noValidate onSubmit={handleSubmit}>
           <Row className="mb-3">
             {chunks(formControls, 4).map((controls, i) => (
-              <Stack key={`${controls[0].name}`} as={Row} direction={direction} gap={3} className={i > 0 && 'mt-3'}>
+              <Stack key={`${controls[0].name}`} as={Row} direction={direction} gap={3} className={i > 0 && 'mt-3'} style={{ alignItems: 'stretch' }}>
                 {controls.map(({
                   label, name, type, placeholder, ...rest
                 }) => (
@@ -133,9 +133,9 @@ export default function RecordForm({
 
           {showAlert && <Alert variant="danger" className="mt-3" onClose={() => setShowAlert(false)} dismissible>{alertMessage}</Alert>}
 
-          <Row className="float-end" xs="auto">
-            {buttons}
-          </Row>
+          {/* <Row className="float-end" xs="auto"> */}
+          {buttons}
+          {/* </Row> */}
         </Form>
       )}
     </Formik>

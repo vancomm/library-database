@@ -121,7 +121,11 @@ export default function RecordPage() {
               direction="horizontal"
               initialValues={model.defaultValues}
               submitFn={handleInsert}
-              buttons={<Button type="submit" variant="success">Submit</Button>}
+              buttons={(
+                <div className="float-end">
+                  <Button type="submit" variant="success">Submit</Button>
+                </div>
+              )}
             />
           </CollapsibleButton>
         </Row>

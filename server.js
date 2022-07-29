@@ -58,7 +58,12 @@ app.post('/register', async (req, res) => {
   };
   await UserModel.insert(user);
   const token = jwt.sign({ username }, process.env.TOKEN_SECRET);
-  res.status(201).json({ user, token });
+  res.status(201).json({
+    user: {
+      username, name, role, patronId,
+    },
+    token,
+  });
 });
 
 app.post('/login', async (req, res) => {
@@ -68,14 +73,21 @@ app.post('/login', async (req, res) => {
     res.status(404).json({ message: 'Username not found.' });
     return;
   }
-  const { hash } = user;
+  const { hash, ...hashless } = user;
   const correct = await bcrypt.compare(password, hash);
   if (!correct) {
     res.status(400).json({ message: 'Incorrect password.' });
     return;
   }
   const token = jwt.sign({ username }, process.env.TOKEN_SECRET);
-  res.status(200).json({ user, token });
+  res.status(200).json({ user: hashless, token });
+});
+
+app.get('/update', auth, async (req, res) => {
+  const { username } = req;
+  const user = await UserModel.findOne({ username });
+  const { hash, ...hashless } = user;
+  res.status(200).json({ user: hashless });
 });
 
 /*

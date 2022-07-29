@@ -15,7 +15,7 @@ export default async function auth(req, res, next) {
   jwt.verify(token, process.env.TOKEN_SECRET, (err, payload) => {
     if (err) return res.status(403).json({ message: err });
     console.log(`Verified as user: ${JSON.stringify(payload.username)}`);
-    req.user = payload;
+    req.username = payload.username;
     next();
   });
 }

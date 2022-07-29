@@ -29,3 +29,5 @@ export const existsRoute = 'https://localhost:3001/exists';
 export const borrowRoute = 'https://localhost:3001/borrows';
 
 export const availableCopyRoute = 'https://localhost:3001/books/available-copy';
+
+export const updateRoute = 'https://localhost:3001/update';

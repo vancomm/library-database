@@ -37,7 +37,7 @@ const formFields = [
     labelKey: (book) => book.title,
   },
   {
-    label: 'Date',
+    label: 'Start date',
     name: 'borrowDate',
     type: 'date',
     placeholder: '',
@@ -61,6 +61,7 @@ const beforeInsert = async (values, { token }) => {
   console.log(values);
   const res = await BookService.getAvailableCopy(book[0].id, token);
   if (res.status !== 200) {
+    if (res.status === 404) return { success: false, message: 'This book is unavailable now. You can place a hold instead.' };
     const { message } = await res.json();
     return { success: false, message };
   }
@@ -82,7 +83,7 @@ const beforeUpdate = async (values, ctx) => {
 
 };
 
-const tableHeaders = ['Book', 'Patron', 'Date', 'Due date', 'Return date'];
+const tableHeaders = ['Book', 'Patron', 'Start date', 'Due date', 'Return date'];
 
 const toData = ({
   id, copy, patron, borrowDate, borrowPeriod,

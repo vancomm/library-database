@@ -15,8 +15,6 @@ export function AuthProvider({ children }) {
 
   const [user, setUser] = useState(getUser());
 
-  // console.log(getUser());
-
   const saveUser = (userData) => {
     sessionStorage.setItem('user', JSON.stringify(userData));
     setUser(userData);
@@ -63,13 +61,22 @@ export function AuthProvider({ children }) {
     return res;
   };
 
+  const update = async () => {
+    const res = await AuthService.update(token);
+    if (res.success) {
+      saveUser(res.user);
+    } else {
+      console.log(res.message);
+    }
+  };
+
   const signout = () => {
     unsetUser();
     unsetToken();
   };
 
   const values = {
-    user, token, tryLogin, tryRegister, signout,
+    user, token, tryLogin, tryRegister, update, signout,
   };
 
   return (
