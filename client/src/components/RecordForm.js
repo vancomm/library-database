@@ -25,7 +25,6 @@ export default function RecordForm({
   const onSubmit = async (values, { resetForm }) => {
     setShowAlert(false);
     const res = await submitFn(values);
-    console.log(res);
     if (!res.success) {
       setAlertMessage(res.message);
       setShowAlert(true);

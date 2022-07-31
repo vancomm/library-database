@@ -25,6 +25,11 @@ const navLinks = [
     roles: ['admin'],
   },
   {
+    label: 'Authors',
+    to: '/authors',
+    roles: ['admin'],
+  },
+  {
     label: 'Categories',
     to: '/categories',
     roles: ['admin'],

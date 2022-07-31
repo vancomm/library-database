@@ -13,25 +13,26 @@ SELECT c.* FROM copy c
 LEFT JOIN borrow b
 ON c.id = b.copyId
 WHERE
-  (c.bookId = ?)
-  AND
-  (c.discardedDate = '' OR c.discardedDate IS NULL)
-  AND 
-  (
-    (b.borrowDate = '' OR b.borrowDate IS NULL)
-    OR 
-    (b.returnDate != '' AND b.returnDate IS NOT NULL)
-  )
+  c.bookId = ?
+  AND (c.discardedDate = '' OR c.discardedDate IS NULL)
+  AND NOT EXISTS
+    (SELECT * FROM borrow br
+    WHERE 
+      br.copyId = c.id 
+      AND (br.returnDate = '' OR br.returnDate IS NULL)
+    )
 `;
 
 BookRouter.get('/available-copy/:id', async (req, res) => {
   const { id } = req.params;
+  console.log(id);
   const copies = await query(getAvailableQuery, [id]);
   if (copies.length === 0) {
     res.status(404).json({ message: 'Not found' });
     return;
   }
   const [copy] = copies;
+  console.log(copy);
   res.status(200).json({ id: copy.id });
 });
 

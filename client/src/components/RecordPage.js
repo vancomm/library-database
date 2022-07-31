@@ -62,9 +62,11 @@ export default function RecordPage() {
   };
 
   const updateWrapper = async (prev) => {
+    console.log(prev);
     if (!prev.success) return prev;
     const { id, ...data } = prev.record;
     const res = await service.updateById(id, data, token);
+    console.log(res);
     if (res.status === 200) {
       await fetchRecords();
       handleCloseUpdateModal();
@@ -76,7 +78,8 @@ export default function RecordPage() {
 
   const handleInsert = async (values) => model.beforeInsert(values, { token }).then(postWrapper);
 
-  const handleUpdate = async (values) => model.beforeUpdate(values, { token }).then(updateWrapper);
+  const handleUpdate = (id) => async (values) => model.beforeUpdate({ id, ...values }, { token })
+    .then(updateWrapper);
 
   const handleEdit = (id) => (e) => {
     e.target.blur();
@@ -152,7 +155,7 @@ export default function RecordPage() {
       >
         <RecordForm
           initialValues={{ ...model.defaultValues, ...updateModalData }}
-          submitFn={handleUpdate}
+          submitFn={handleUpdate(updateModalData.id)}
           buttons={(
             <div className="float-end">
               <Button variant="secondary" onClick={handleCloseUpdateModal}>Cancel</Button>

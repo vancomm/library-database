@@ -80,11 +80,10 @@ BookModel.insert = async function insert(data) {
 
 BookModel.removeById = async function removeById(id) {
   return Promise.all([
-    remove(this.table, { where: { id } }),
     remove('bookAuthor', { where: { bookId: id } }),
     remove('bookCategory', { where: { bookId: id } }),
     remove('bookTag', { where: { bookId: id } }),
-  ]);
+  ]).then(() => remove(this.table, { where: { id } }));
 };
 
 BookModel.updateById = async function updateById(bookId, book) {

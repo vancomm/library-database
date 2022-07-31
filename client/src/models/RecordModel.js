@@ -1,4 +1,6 @@
 import * as yup from 'yup';
+import Button from 'react-bootstrap/Button';
+import ButtonGroup from 'react-bootstrap/ButtonGroup';
 
 function aggregate(formFields) {
   return formFields.reduce((acc, field) => {
@@ -37,6 +39,7 @@ export default class RecordModel {
     name, formFields, tableHeaders,
     toData, toRow, toLine,
     beforeUpdate, beforeInsert,
+    buttons,
   }) {
     this.name = name;
 

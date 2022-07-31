@@ -4,7 +4,7 @@ import Navigation from './components/Navigation';
 import TagPage from './pages/Tag.page';
 import BookPage from './pages/Book.page';
 import CopyPage from './pages/Copy.page';
-import HomePage from './pages/Home.page';
+import HomePage from './pages/Home';
 import AuthorPage from './pages/Author.page';
 import BorrowPage from './pages/Borrow.page';
 import PatronPage from './pages/Patron.page';

@@ -79,11 +79,23 @@ const beforeInsert = async (values, { token }) => {
   };
 };
 
-const beforeUpdate = async (values, ctx) => {
-
+const beforeUpdate = async (values) => {
+  const {
+    id, patron, patronId, copyId, borrowDate, borrowPeriod,
+  } = values;
+  return {
+    success: true,
+    record: {
+      id,
+      patronId: patron[0]?.id ?? patronId,
+      copyId,
+      borrowDate,
+      dueDate: dateToString(addDays(borrowDate, borrowPeriod)),
+    },
+  };
 };
 
-const tableHeaders = ['Book', 'Patron', 'Start date', 'Due date', 'Return date'];
+const tableHeaders = ['Book', 'Patron', 'Copy id', 'Start date', 'Due date', 'Return date'];
 
 const toData = ({
   id, copy, patron, borrowDate, borrowPeriod,
@@ -96,11 +108,12 @@ const toData = ({
 });
 
 const toRow = ({
-  id, book, patron, borrowDate, dueDate, returnDate,
+  id, book, patron, copyId, borrowDate, dueDate, returnDate,
 }) => ([
   id,
   BookModel.toLine(book[0]),
   PatronModel.toLine(patron[0]),
+  copyId,
   borrowDate,
   dueDate,
   returnDate,
@@ -119,6 +132,7 @@ const BorrowModel = new RecordModel({
   toRow,
   toLine,
   beforeInsert,
+  beforeUpdate,
 });
 
 export default BorrowModel;
