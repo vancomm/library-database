@@ -15,7 +15,7 @@ export default function Home() {
       }}
       >
         <p className={styles.banner}>Welcome to NN City Public Library</p>
-        {/* <Calculator /> */}
+        <Calculator />
         <Clock />
       </div>
     </Container>

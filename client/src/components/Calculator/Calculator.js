@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import '../assets/calculator.css';
+import cn from 'classnames';
+import styles from './Calculator.module.css';
 
 export default function Calculator() {
   const ops = {
@@ -51,63 +52,63 @@ export default function Calculator() {
   };
 
   return (
-    <div className="calculator">
-      <div className="screen">
-        <div className="previous-operand">{[previousOperand, operation].join(' ')}</div>
-        <div className="current-operand">{currentOperand}</div>
+    <div className={styles.calculator}>
+      <div className={styles.screen}>
+        <div className={styles['previous-operand']}>{[previousOperand, operation].join(' ')}</div>
+        <div className={styles['current-operand']}>{currentOperand}</div>
       </div>
-      <button type="button" className="action-btn span-2" onClick={handleAllClearClick}>
+      <button type="button" className={cn('action-btn', styles['span-2'])} onClick={handleAllClearClick}>
         AC
       </button>
       <button type="button" className="action-btn" onClick={handleDeleteClick}>
         DEL
       </button>
-      <button type="button" className="op-btn" onClick={handleOperationClick('÷')}>
+      <button type="button" className={styles['op-btn']} onClick={handleOperationClick('÷')}>
         ÷
       </button>
-      <button type="button" className="num-btn" onClick={handleNumberClick(1)}>
+      <button type="button" className={styles['num-btn']} onClick={handleNumberClick(1)}>
         1
       </button>
-      <button type="button" className="num-btn" onClick={handleNumberClick(2)}>
+      <button type="button" className={styles['num-btn']} onClick={handleNumberClick(2)}>
         2
       </button>
-      <button type="button" className="num-btn" onClick={handleNumberClick(3)}>
+      <button type="button" className={styles['num-btn']} onClick={handleNumberClick(3)}>
         3
       </button>
-      <button type="button" className="op-btn" onClick={handleOperationClick('×')}>
+      <button type="button" className={styles['op-btn']} onClick={handleOperationClick('×')}>
         ×
       </button>
-      <button type="button" className="num-btn" onClick={handleNumberClick(4)}>
+      <button type="button" className={styles['num-btn']} onClick={handleNumberClick(4)}>
         4
       </button>
-      <button type="button" className="num-btn" onClick={handleNumberClick(5)}>
+      <button type="button" className={styles['num-btn']} onClick={handleNumberClick(5)}>
         5
       </button>
-      <button type="button" className="num-btn" onClick={handleNumberClick(6)}>
+      <button type="button" className={styles['num-btn']} onClick={handleNumberClick(6)}>
         6
       </button>
-      <button type="button" className="op-btn" onClick={handleOperationClick('+')}>
+      <button type="button" className={styles['op-btn']} onClick={handleOperationClick('+')}>
         +
       </button>
-      <button type="button" className="num-btn" onClick={handleNumberClick(7)}>
+      <button type="button" className={styles['num-btn']} onClick={handleNumberClick(7)}>
         7
       </button>
-      <button type="button" className="num-btn" onClick={handleNumberClick(8)}>
+      <button type="button" className={styles['num-btn']} onClick={handleNumberClick(8)}>
         8
       </button>
-      <button type="button" className="num-btn" onClick={handleNumberClick(9)}>
+      <button type="button" className={styles['num-btn']} onClick={handleNumberClick(9)}>
         9
       </button>
-      <button type="button" className="op-btn" onClick={handleOperationClick('-')}>
+      <button type="button" className={styles['op-btn']} onClick={handleOperationClick('-')}>
         -
       </button>
-      <button type="button" className="num-btn span-2" onClick={handleNumberClick(0)}>
+      <button type="button" className={cn(styles['num-btn'], styles['span-2'])} onClick={handleNumberClick(0)}>
         0
       </button>
-      <button type="button" className="num-btn" onClick={handlePointClick}>
+      <button type="button" className={styles['num-btn']} onClick={handlePointClick}>
         .
       </button>
-      <button type="button" className="op-btn" onClick={handleEqualsClick}>
+      <button type="button" className={styles['op-btn']} onClick={handleEqualsClick}>
         =
       </button>
     </div>
